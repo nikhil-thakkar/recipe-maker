@@ -1,3 +1,5 @@
+
+
 internal object Versions {
     const val kotlin = "1.3.41"
     val androidx = "1.1.0"
@@ -7,6 +9,13 @@ internal object Versions {
     val junit = "4.12"
     val coroutines = "1.3.2"
     val constrainLayout = "1.1.3"
+    val compileSDK = 29
+    val minSDK = 21
+    val targetSDK = compileSDK
+    val buildTools = "29.0.2"
+    val mockk = "1.9"
+    val androidxArch = "2.1.0"
+    val coreTesting = androidxArch
 }
 
 object Libs {
@@ -19,6 +28,9 @@ object Libs {
     val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
     val androidCoroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}"
     val junit = "junit:junit:${Versions.junit}"
+    val coreTesting = "androidx.arch.core:core-testing:${Versions.coreTesting}"
+    val corountinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
+    val mockk = "io.mockk:mockk:${Versions.mockk}"
 }
 
 object BuildPlugins {
