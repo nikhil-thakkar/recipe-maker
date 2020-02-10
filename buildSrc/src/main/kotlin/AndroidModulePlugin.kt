@@ -5,12 +5,16 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 
-class AndroidPlugin : Plugin<Project> {
+/***
+ * This plugin is instantiated every time when you apply the this plugin to build.gradle in feature module
+ * <code>apply plugin: 'dev.nikhi1.plugin.android'</code>
+ */
+class AndroidModulePlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         if (project.hasProperty("android")) {
             project.configureAndroidBlock()
-            project.configureTestDependencies()
+            project.configureCommonDependencies()
         }
     }
 }
@@ -36,11 +40,17 @@ internal fun Project.configureAndroidBlock() = extensions.getByType<BaseExtensio
     }
 }
 
-internal fun Project.configureTestDependencies() = extensions.getByType<BaseExtension>().run {
-
-    dependencies {
-        add("testImplementation", Libs.junit)
-        add("testImplementation", Libs.mockk)
-        add("testImplementation", Libs.corountinesTest)
+internal fun Project.configureCommonDependencies() {
+    extensions.getByType<BaseExtension>().run {
+        dependencies {
+            if (!(name == "app" || name == "core")) {
+                // Since the feature modules need to depend on the :app or the base module
+                //Don't add the app to itself or to core
+                add("implementation", project(":app"))
+            }
+            add("testImplementation", Libs.junit)
+            add("testImplementation", Libs.mockk)
+            add("testImplementation", Libs.corountinesTest)
+        }
     }
 }

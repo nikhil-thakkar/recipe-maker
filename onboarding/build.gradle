@@ -4,6 +4,5 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'dev.nikhi1.plugin.android'
 
 dependencies {
-    implementation project(':app')
-    implementation project(':core')
+
 }

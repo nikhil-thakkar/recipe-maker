@@ -2,11 +2,15 @@
     package="dev.nikhi1.eventbrite.onboarding">
 
     <dist:module
-        dist:title="@string/title_dynamic_feature">
+        dist:title="@string/title_onboarding">
         <dist:delivery>
             <dist:install-time />
         </dist:delivery>
         <dist:fusing dist:include="true" />
     </dist:module>
+
+    <application>
+
+    </application>
 
 </manifest>

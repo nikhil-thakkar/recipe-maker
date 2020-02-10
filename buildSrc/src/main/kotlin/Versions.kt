@@ -32,8 +32,3 @@ object Libs {
     val corountinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
     val mockk = "io.mockk:mockk:${Versions.mockk}"
 }
-
-object BuildPlugins {
-    val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
-    val androidGradle = "com.android.tools.build:gradle:3.5.0"
-}
