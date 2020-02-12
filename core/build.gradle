@@ -3,16 +3,3 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'dev.nikhi1.plugin.android'
 
-dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation Libs.kotlinJDK
-    implementation Libs.appcompat
-    implementation Libs.retrofit
-    implementation Libs.coreKts
-    implementation Libs.constraintLayout
-    implementation Libs.koinViewModel
-    implementation Libs.coroutines
-    implementation Libs.androidCoroutines
-    testImplementation Libs.junit
-    testImplementation Libs.corountinesTest
-}

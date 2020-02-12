@@ -21,12 +21,5 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation Libs.kotlinJDK
-    implementation Libs.appcompat
-    implementation Libs.retrofit
-    implementation Libs.coreKts
-    implementation Libs.constraintLayout
-    implementation Libs.koinViewModel
-    implementation Libs.coroutines
-    implementation Libs.androidCoroutines
+    implementation project(":core")
 }

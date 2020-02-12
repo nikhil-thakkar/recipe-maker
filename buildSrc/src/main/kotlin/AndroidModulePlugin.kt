@@ -16,7 +16,10 @@ class AndroidModulePlugin : Plugin<Project> {
             project.plugins.apply("kotlin-android")
             project.plugins.apply("kotlin-android-extensions")
             project.configureAndroidBlock()
-            project.configureCommonDependencies()
+            if (project.name != "test_shared") {
+                project.configureCommonDependencies()
+            }
+            project.configureTestSharedDependencies()
         }
     }
 }
@@ -46,6 +49,7 @@ internal fun Project.configureCommonDependencies() {
     //find the app module
     //replace this with your base module if using otherwise
     val app = findProject(":app")
+    val core = findProject(":core")
     extensions.getByType<BaseExtension>().run {
         dependencies {
             if (!(name == "app" || name == "core")) {
@@ -54,9 +58,47 @@ internal fun Project.configureCommonDependencies() {
                 if (app != null) {
                     add("implementation", app)
                 }
+
+                if (core != null) {
+                    add("implementation", core)
+                }
             }
+            add("implementation", Libs.material)
+            add("implementation", Libs.coreKtx)
+            add("implementation", Libs.retrofit)
+            add("implementation", Libs.koinViewModel)
+            add("implementation", Libs.lifecycle)
+            add("implementation", Libs.lifecycleViewModel)
+            add("implementation", Libs.lifecycleViewModelKtx)
+            add("implementation", Libs.lifecycleLiveDataKtx)
+            add("implementation", Libs.coroutines)
+            add("implementation", Libs.androidCoroutines)
+        }
+    }
+}
+
+internal fun Project.configureTestSharedDependencies() {
+    val core = findProject(":core")
+    val testShared = findProject(":test_shared")
+
+    extensions.getByType<BaseExtension>().run {
+        dependencies {
+            if (name == "test_shared") {
+                if (core != null) {
+                    add("implementation", core)
+                }
+                add("implementation", Libs.lifecycle)
+                add("implementation", Libs.lifecycleViewModel)
+                add("implementation", Libs.lifecycleViewModelKtx)
+                add("implementation", Libs.lifecycleLiveDataKtx)
+            }
+            if (testShared != null) {
+                add("testImplementation", testShared)
+            }
+
             add("testImplementation", Libs.junit)
             add("testImplementation", Libs.mockk)
+            add("testImplementation", Libs.coreTesting)
             add("testImplementation", Libs.corountinesTest)
         }
     }

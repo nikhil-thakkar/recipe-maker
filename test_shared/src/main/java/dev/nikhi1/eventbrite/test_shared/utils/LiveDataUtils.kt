@@ -1,4 +1,4 @@
-package dev.nikhi1.eventbrite.core.utils
+package dev.nikhi1.eventbrite.test_shared.utils
 
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
