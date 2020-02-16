@@ -11,7 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
-
+    
     dynamicFeatures = [
             ':home',
             ':onboarding',
@@ -22,4 +22,5 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(":core")
+    implementation Libs.constraintLayout
 }

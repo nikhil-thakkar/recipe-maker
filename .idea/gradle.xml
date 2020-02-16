@@ -14,6 +14,7 @@
             <option value="$PROJECT_DIR$/home" />
             <option value="$PROJECT_DIR$/onboarding" />
             <option value="$PROJECT_DIR$/search" />
+            <option value="$PROJECT_DIR$/test_shared" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

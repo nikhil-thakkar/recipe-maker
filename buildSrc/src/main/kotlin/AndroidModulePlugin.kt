@@ -4,6 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /***
  * This plugin is instantiated every time when you apply the this plugin to build.gradle in feature module
@@ -38,6 +39,12 @@ internal fun Project.configureAndroidBlock() = extensions.getByType<BaseExtensio
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    tasks.withType(KotlinCompile::class.java).configureEach {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
     }
 
     testOptions {
