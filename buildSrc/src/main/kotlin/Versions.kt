@@ -2,7 +2,7 @@
 
 internal object Versions {
     const val kotlin = "1.3.41"
-    val androidx = "1.1.0"
+    val androidx = "1.2.0"
     val retrofit = "2.3.0"
     val coreKtx = androidx
     val koin = "2.0.1"

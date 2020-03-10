@@ -46,10 +46,6 @@ internal fun Project.configureAndroidBlock() = extensions.getByType<BaseExtensio
             jvmTarget = "1.8"
         }
     }
-
-    testOptions {
-        unitTests.isReturnDefaultValues = true
-    }
 }
 
 internal fun Project.configureCommonDependencies() {
@@ -87,6 +83,7 @@ internal fun Project.configureCommonDependencies() {
 internal fun Project.configureTestSharedDependencies() {
     val core = findProject(":core")
     val testShared = findProject(":test_shared")
+    val app = findProject(":app")
 
     extensions.getByType<BaseExtension>().run {
         dependencies {
@@ -107,6 +104,11 @@ internal fun Project.configureTestSharedDependencies() {
             add("testImplementation", Libs.mockk)
             add("testImplementation", Libs.coreTesting)
             add("testImplementation", Libs.corountinesTest)
+
+            if (app != null && name != "app" && name != "core" && name != "test_shared") {
+                add("androidTestImplementation", app)
+            }
+
         }
     }
 }

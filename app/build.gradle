@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-apply from: 'https://raw.githubusercontent.com/JakeWharton/SdkSearch/master/gradle/projectDependencyGraph.gradle'
+//apply from: 'https://raw.githubusercontent.com/JakeWharton/SdkSearch/master/gradle/projectDependencyGraph.gradle'
 
 apply plugin: 'dev.nikhi1.plugin.android'
 

@@ -7,6 +7,8 @@ import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
+val <T> T.exhaustive: T
+    get() = this
 
 object Core {
 

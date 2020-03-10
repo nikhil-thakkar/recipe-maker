@@ -6,18 +6,15 @@ import androidx.lifecycle.Observer
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
+import org.koin.core.context.unloadKoinModules
+import org.koin.core.module.Module
 import org.koin.dsl.module
 
+private var module: Module = module {
+    viewModel { SplashViewModel() }
+}
 
 class SplashActivity : AppCompatActivity() {
-
-    private companion object {
-        init {
-            loadKoinModules(module {
-                viewModel { SplashViewModel() }
-            })
-        }
-    }
 
     private val viewModel: SplashViewModel by viewModel()
 
@@ -25,8 +22,15 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        loadKoinModules(module)
+
         viewModel.navigate.observe(this, Observer {
 
         })
+    }
+
+    override fun onDestroy() {
+        unloadKoinModules(module)
+        super.onDestroy()
     }
 }
