@@ -12,7 +12,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.io.IOException
 
 @ExperimentalCoroutinesApi
 class OnboardingViewModelTest {
@@ -40,6 +39,15 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `empty topics or interests`() {
+        coroutinesRule.runBlocking {
+            val uiState = OnboardingViewState(uiState = UIState.Empty, categories = emptyList())
+            viewModel.fetchTopics()
+            assertEquals(uiState, viewModel.viewState.getOrAwaitValue())
+        }
+    }
+
+    @Test
     fun `failed fetch topics or interests`() {
         coroutinesRule.runBlocking {
             val uiState = OnboardingViewState(uiState = UIState.Error)
@@ -51,6 +59,6 @@ class OnboardingViewModelTest {
 
 class FakeRepo : DataRepository {
     override suspend fun getTopics(): Result<List<String>> {
-        return Result.Failure(IOException())
+        return Result.Success(listOf())
     }
 }
