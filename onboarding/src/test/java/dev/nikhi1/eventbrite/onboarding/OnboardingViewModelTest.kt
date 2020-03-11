@@ -7,11 +7,14 @@ import dev.nikhi1.eventbrite.onboarding.data.DataRepository
 import dev.nikhi1.eventbrite.test_shared.utils.MainCoroutineRule
 import dev.nikhi1.eventbrite.test_shared.utils.getOrAwaitValue
 import dev.nikhi1.eventbrite.test_shared.utils.runBlocking
+import io.mockk.coEvery
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.IOException
 
 @ExperimentalCoroutinesApi
 class OnboardingViewModelTest {
@@ -24,15 +27,19 @@ class OnboardingViewModelTest {
 
     lateinit var viewModel: OnboardingViewModel
 
+    lateinit var mock: DataRepository
+
     @Before
     fun setup() {
-        viewModel = OnboardingViewModel(FakeRepo())
+        mock = mockk()
+        viewModel = OnboardingViewModel(mock)
     }
 
     @Test
     fun `fetch topics or interests`() {
         coroutinesRule.runBlocking {
             val uiState = OnboardingViewState(uiState = UIState.Content, categories = listOf("nikhil"))
+            coEvery {  mock.getTopics() } returns Result.Success(listOf("nikhil"))
             viewModel.fetchTopics()
             assertEquals(uiState, viewModel.viewState.getOrAwaitValue())
         }
@@ -41,7 +48,8 @@ class OnboardingViewModelTest {
     @Test
     fun `empty topics or interests`() {
         coroutinesRule.runBlocking {
-            val uiState = OnboardingViewState(uiState = UIState.Empty, categories = emptyList())
+            val uiState = OnboardingViewState(uiState = UIState.Empty)
+            coEvery {  mock.getTopics() } returns Result.Success(listOf())
             viewModel.fetchTopics()
             assertEquals(uiState, viewModel.viewState.getOrAwaitValue())
         }
@@ -51,14 +59,9 @@ class OnboardingViewModelTest {
     fun `failed fetch topics or interests`() {
         coroutinesRule.runBlocking {
             val uiState = OnboardingViewState(uiState = UIState.Error)
+            coEvery {  mock.getTopics() } returns Result.Failure(IOException())
             viewModel.fetchTopics()
             assertEquals(uiState, viewModel.viewState.getOrAwaitValue())
         }
-    }
-}
-
-class FakeRepo : DataRepository {
-    override suspend fun getTopics(): Result<List<String>> {
-        return Result.Success(listOf())
     }
 }
