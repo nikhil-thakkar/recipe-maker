@@ -38,8 +38,8 @@ class OnboardingViewModelTest {
     @Test
     fun `fetch topics or interests`() {
         coroutinesRule.runBlocking {
-            val uiState = OnboardingViewState(uiState = UIState.Content, categories = listOf("nikhil"))
-            coEvery {  mock.getTopics() } returns Result.Success(listOf("nikhil"))
+            val uiState = OnboardingViewState(uiState = UIState.Content, categories = listOf(TestData.subcategory))
+            coEvery {  mock.getTopics() } returns Result.Success(TestData.subCategoryResponse)
             viewModel.fetchTopics()
             assertEquals(uiState, viewModel.viewState.getOrAwaitValue())
         }
@@ -49,7 +49,7 @@ class OnboardingViewModelTest {
     fun `empty topics or interests`() {
         coroutinesRule.runBlocking {
             val uiState = OnboardingViewState(uiState = UIState.Empty)
-            coEvery {  mock.getTopics() } returns Result.Success(listOf())
+            coEvery {  mock.getTopics() } returns Result.Success(TestData.emptySubCategoryResponse)
             viewModel.fetchTopics()
             assertEquals(uiState, viewModel.viewState.getOrAwaitValue())
         }
