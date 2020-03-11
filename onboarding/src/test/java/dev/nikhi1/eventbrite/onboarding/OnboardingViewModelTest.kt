@@ -27,19 +27,19 @@ class OnboardingViewModelTest {
 
     lateinit var viewModel: OnboardingViewModel
 
-    lateinit var mock: DataRepository
+    lateinit var dataRepository: DataRepository
 
     @Before
     fun setup() {
-        mock = mockk()
-        viewModel = OnboardingViewModel(mock)
+        dataRepository = mockk()
+        viewModel = OnboardingViewModel(dataRepository)
     }
 
     @Test
     fun `fetch topics or interests`() {
         coroutinesRule.runBlocking {
             val uiState = OnboardingViewState(uiState = UIState.Content, categories = listOf(TestData.subcategory))
-            coEvery {  mock.getTopics() } returns Result.Success(TestData.subCategoryResponse)
+            coEvery {  dataRepository.getTopics(any()) } returns Result.Success(TestData.subCategoryResponse)
             viewModel.fetchTopics()
             assertEquals(uiState, viewModel.viewState.getOrAwaitValue())
         }
@@ -49,7 +49,7 @@ class OnboardingViewModelTest {
     fun `empty topics or interests`() {
         coroutinesRule.runBlocking {
             val uiState = OnboardingViewState(uiState = UIState.Empty)
-            coEvery {  mock.getTopics() } returns Result.Success(TestData.emptySubCategoryResponse)
+            coEvery {  dataRepository.getTopics(any()) } returns Result.Success(TestData.emptySubCategoryResponse)
             viewModel.fetchTopics()
             assertEquals(uiState, viewModel.viewState.getOrAwaitValue())
         }
@@ -59,7 +59,7 @@ class OnboardingViewModelTest {
     fun `failed fetch topics or interests`() {
         coroutinesRule.runBlocking {
             val uiState = OnboardingViewState(uiState = UIState.Error)
-            coEvery {  mock.getTopics() } returns Result.Failure(IOException())
+            coEvery {  dataRepository.getTopics(any()) } returns Result.Failure(IOException())
             viewModel.fetchTopics()
             assertEquals(uiState, viewModel.viewState.getOrAwaitValue())
         }

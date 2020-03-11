@@ -28,7 +28,7 @@ class OnboardingViewModel(private val dataRepository: DataRepository) : BaseView
 
         viewModelScope.launch {
 
-            when (val result = dataRepository.getTopics()) {
+            when (val result = dataRepository.getTopics(null)) {
 
                 is Result.Success -> {
                     val data = result.data ?: SubCategoryResponse.EMPTY
