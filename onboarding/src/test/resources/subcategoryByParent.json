@@ -1,0 +1,320 @@
+[
+  {
+    "id": "101",
+    "name": "Business & Professional",
+    "subcategories": [
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/1001/",
+        "id": "1001",
+        "name": "Startups & Small Business",
+        "name_localized": "Startups & Small Business"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/1002/",
+        "id": "1002",
+        "name": "Finance",
+        "name_localized": "Finance"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/1003/",
+        "id": "1003",
+        "name": "Environment & Sustainability",
+        "name_localized": "Environment & Sustainability"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/1004/",
+        "id": "1004",
+        "name": "Educators",
+        "name_localized": "Educators"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/1005/",
+        "id": "1005",
+        "name": "Real Estate",
+        "name_localized": "Real Estate"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/1006/",
+        "id": "1006",
+        "name": "Non Profit & NGOs",
+        "name_localized": "Non Profit & NGOs"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/1007/",
+        "id": "1007",
+        "name": "Sales & Marketing",
+        "name_localized": "Sales & Marketing"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/1008/",
+        "id": "1008",
+        "name": "Media",
+        "name_localized": "Media"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/1009/",
+        "id": "1009",
+        "name": "Design",
+        "name_localized": "Design"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/1010/",
+        "id": "1010",
+        "name": "Career",
+        "name_localized": "Career"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/1011/",
+        "id": "1011",
+        "name": "Investment",
+        "name_localized": "Investment"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/1999/",
+        "id": "1999",
+        "name": "Other",
+        "name_localized": "Other"
+      }
+    ]
+  },
+  {
+    "id": "102",
+    "name": "Science & Technology",
+    "subcategories": [
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/2001/",
+        "id": "2001",
+        "name": "Medicine",
+        "name_localized": "Medicine"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/2002/",
+        "id": "2002",
+        "name": "Science",
+        "name_localized": "Science"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/2003/",
+        "id": "2003",
+        "name": "Biotech",
+        "name_localized": "Biotech"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/2004/",
+        "id": "2004",
+        "name": "High Tech",
+        "name_localized": "High Tech"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/2005/",
+        "id": "2005",
+        "name": "Mobile",
+        "name_localized": "Mobile"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/2006/",
+        "id": "2006",
+        "name": "Social Media",
+        "name_localized": "Social Media"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/2007/",
+        "id": "2007",
+        "name": "Robotics",
+        "name_localized": "Robotics"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/2999/",
+        "id": "2999",
+        "name": "Other",
+        "name_localized": "Other"
+      }
+    ]
+  },
+  {
+    "id": "103",
+    "name": "Music",
+    "subcategories": [
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3001/",
+        "id": "3001",
+        "name": "Alternative",
+        "name_localized": "Alternative"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3002/",
+        "id": "3002",
+        "name": "Blues & Jazz",
+        "name_localized": "Blues & Jazz"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3003/",
+        "id": "3003",
+        "name": "Classical",
+        "name_localized": "Classical"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3004/",
+        "id": "3004",
+        "name": "Country",
+        "name_localized": "Country"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3005/",
+        "id": "3005",
+        "name": "Cultural",
+        "name_localized": "Cultural"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3006/",
+        "id": "3006",
+        "name": "EDM / Electronic",
+        "name_localized": "EDM / Electronic"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3007/",
+        "id": "3007",
+        "name": "Folk",
+        "name_localized": "Folk"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3008/",
+        "id": "3008",
+        "name": "Hip Hop / Rap",
+        "name_localized": "Hip Hop / Rap"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3009/",
+        "id": "3009",
+        "name": "Indie",
+        "name_localized": "Indie"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3010/",
+        "id": "3010",
+        "name": "Latin",
+        "name_localized": "Latin"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3011/",
+        "id": "3011",
+        "name": "Metal",
+        "name_localized": "Metal"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3012/",
+        "id": "3012",
+        "name": "Opera",
+        "name_localized": "Opera"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3013/",
+        "id": "3013",
+        "name": "Pop",
+        "name_localized": "Pop"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3014/",
+        "id": "3014",
+        "name": "R&B",
+        "name_localized": "R&B"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3015/",
+        "id": "3015",
+        "name": "Reggae",
+        "name_localized": "Reggae"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3016/",
+        "id": "3016",
+        "name": "Religious/Spiritual",
+        "name_localized": "Religious/Spiritual"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3017/",
+        "id": "3017",
+        "name": "Rock",
+        "name_localized": "Rock"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3018/",
+        "id": "3018",
+        "name": "Top 40",
+        "name_localized": "Top 40"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3019/",
+        "id": "3019",
+        "name": "Acoustic",
+        "name_localized": "Acoustic"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3020/",
+        "id": "3020",
+        "name": "Americana",
+        "name_localized": "Americana"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3021/",
+        "id": "3021",
+        "name": "Bluegrass",
+        "name_localized": "Bluegrass"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3022/",
+        "id": "3022",
+        "name": "Blues",
+        "name_localized": "Blues"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3023/",
+        "id": "3023",
+        "name": "DJ/Dance",
+        "name_localized": "DJ/Dance"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3024/",
+        "id": "3024",
+        "name": "EDM",
+        "name_localized": "EDM"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3025/",
+        "id": "3025",
+        "name": "Electronic",
+        "name_localized": "Electronic"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3026/",
+        "id": "3026",
+        "name": "Experimental",
+        "name_localized": "Experimental"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3027/",
+        "id": "3027",
+        "name": "Jazz",
+        "name_localized": "Jazz"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3028/",
+        "id": "3028",
+        "name": "Psychedelic",
+        "name_localized": "Psychedelic"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3029/",
+        "id": "3029",
+        "name": "Punk/Hardcore",
+        "name_localized": "Punk/Hardcore"
+      },
+      {
+        "resource_uri": "https://www.eventbriteapi.com/v3/subcategories/3030/",
+        "id": "3030",
+        "name": "Singer/Songwriter",
+        "name_localized": "Singer/Songwriter"
+      }
+    ]
+  }
+]

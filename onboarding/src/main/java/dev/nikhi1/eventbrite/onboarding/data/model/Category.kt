@@ -1,6 +1,6 @@
 package dev.nikhi1.eventbrite.onboarding.data.model
 
-data class ParentCategory(
+data class Category(
     val id: String,
     val name: String,
     val name_localized: String,

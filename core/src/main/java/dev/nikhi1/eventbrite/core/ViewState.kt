@@ -14,7 +14,7 @@ abstract class BaseViewModel<ViewState> : ViewModel() {
 sealed class UIState {
     object Loading : UIState()
     object Empty : UIState()
-    object Error : UIState()
+    data class Error(val error: Throwable? = null) : UIState()
     object Content : UIState()
 }
 

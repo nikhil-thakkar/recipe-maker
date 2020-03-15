@@ -1,5 +1,6 @@
-package dev.nikhi1.eventbrite.onboarding
+package dev.nikhi1.eventbrite.onboarding.ui
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import dev.nikhi1.eventbrite.core.BaseViewModel
@@ -11,16 +12,20 @@ import dev.nikhi1.eventbrite.core.exhaustive
 import dev.nikhi1.eventbrite.onboarding.data.DataRepository
 import dev.nikhi1.eventbrite.onboarding.data.model.SubCategoryResponse
 import dev.nikhi1.eventbrite.onboarding.data.model.Subcategory
+import dev.nikhi1.eventbrite.onboarding.ui.model.Category
 import kotlinx.coroutines.launch
+import java.lang.reflect.Modifier
 
 data class OnboardingViewState(
     val uiState: UIState = UIState.Loading,
-    val categories: List<Subcategory> = emptyList()
+    val categories: List<Category> = emptyList()
 ) : ViewState
 
 class OnboardingViewModel(private val dataRepository: DataRepository) : BaseViewModel<OnboardingViewState>() {
 
-    private val _viewState = ViewStateLiveData(OnboardingViewState())
+    private val _viewState = ViewStateLiveData(
+        OnboardingViewState()
+    )
 
     override val viewState: LiveData<OnboardingViewState> = _viewState
 
@@ -33,16 +38,30 @@ class OnboardingViewModel(private val dataRepository: DataRepository) : BaseView
                 is Result.Success -> {
                     val data = result.data ?: SubCategoryResponse.EMPTY
                     if (data.subcategories.isNotEmpty()) {
-                        _viewState.value = _viewState.value.copy(uiState = UIState.Content, categories = data.subcategories)
+                        _viewState.value =
+                            _viewState.value.copy(uiState = UIState.Content, categories = groupSubcategoryByParentCategory(data.subcategories))
                     } else {
                         _viewState.value = _viewState.value.copy(uiState = UIState.Empty)
                     }
                 }
 
                 is Result.Failure -> {
-                    _viewState.value = _viewState.value.copy(uiState = UIState.Error)
+                    _viewState.value = _viewState.value.copy(uiState = UIState.Error(result.error))
                 }
             }.exhaustive
+        }
+    }
+
+    @VisibleForTesting(otherwise = Modifier.PRIVATE)
+    fun groupSubcategoryByParentCategory(list: List<Subcategory>): List<Category> {
+        if (list.isEmpty()) return emptyList()
+
+        //start grouping
+        return list.groupBy { it.parent_category }.map {
+            val subCategories = it.value.map { subcategory ->
+                dev.nikhi1.eventbrite.onboarding.ui.model.Subcategory(subcategory.id, subcategory.name)
+            }
+            Category(it.key.id, it.key.name, subCategories)
         }
     }
 }

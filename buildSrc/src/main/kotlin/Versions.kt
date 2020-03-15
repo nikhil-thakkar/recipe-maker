@@ -18,6 +18,7 @@ internal object Versions {
     val coreTesting = androidxArch
     val lifecycle = "2.2.0"
     val material = "1.1.0-rc02"
+    val gson = "2.8.6"
 }
 
 object Libs {
@@ -34,6 +35,7 @@ object Libs {
     val lifecycleLiveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycle}"
     val lifecycleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
     val material = "com.google.android.material:material:${Versions.material}"
+    val gson = "com.google.code.gson:gson:${Versions.gson}"
 
     val junit = "junit:junit:${Versions.junit}"
     val coreTesting = "androidx.arch.core:core-testing:${Versions.coreTesting}"

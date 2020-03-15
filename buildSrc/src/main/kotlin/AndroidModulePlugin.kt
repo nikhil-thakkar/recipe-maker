@@ -76,6 +76,7 @@ internal fun Project.configureCommonDependencies() {
             add("implementation", Libs.lifecycleLiveDataKtx)
             add("implementation", Libs.coroutines)
             add("implementation", Libs.androidCoroutines)
+            add("implementation", Libs.gson)
         }
     }
 }
