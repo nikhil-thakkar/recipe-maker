@@ -7,7 +7,7 @@ import dev.nikhi1.eventbrite.onboarding.data.model.Pagination
 import dev.nikhi1.eventbrite.onboarding.data.model.SubCategoryResponse
 import dev.nikhi1.eventbrite.onboarding.data.model.Subcategory
 import java.lang.reflect.Type
-
+import dev.nikhi1.eventbrite.onboarding.ui.model.Category as UICategory
 
 object TestData {
 
@@ -46,10 +46,10 @@ object TestData {
         getTextInFile("subcategoryByParent.json")
     }
 
-    val subcategoryByParent: List<dev.nikhi1.eventbrite.onboarding.ui.model.Category> by lazy {
+    val subcategoryByParent: List<UICategory> by lazy {
         val categoryListType: Type = object :
-            TypeToken<List<dev.nikhi1.eventbrite.onboarding.ui.model.Category>>(){}.type
-        gson.fromJson<List<dev.nikhi1.eventbrite.onboarding.ui.model.Category>>(subcategoryByParentJson, categoryListType)
+            TypeToken<List<UICategory>>(){}.type
+        gson.fromJson<List<UICategory>>(subcategoryByParentJson, categoryListType)
     }
 
     private fun getTextInFile(fileName: String): String? =

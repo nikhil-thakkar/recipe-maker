@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModel
 
 interface ViewState
 
-abstract class BaseViewModel<ViewState> : ViewModel() {
-    abstract val viewState: LiveData<ViewState>
+abstract class BaseViewModel<VS: ViewState> : ViewModel() {
+    abstract val viewState: LiveData<VS>
 }
 
 sealed class UIState {

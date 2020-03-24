@@ -14,7 +14,6 @@ import dev.nikhi1.eventbrite.onboarding.data.model.SubCategoryResponse
 import dev.nikhi1.eventbrite.onboarding.data.model.Subcategory
 import dev.nikhi1.eventbrite.onboarding.ui.model.Category
 import kotlinx.coroutines.launch
-import java.lang.reflect.Modifier
 
 data class OnboardingViewState(
     val uiState: UIState = UIState.Loading,
@@ -52,7 +51,7 @@ class OnboardingViewModel(private val dataRepository: DataRepository) : BaseView
         }
     }
 
-    @VisibleForTesting(otherwise = Modifier.PRIVATE)
+    @VisibleForTesting
     fun groupSubcategoryByParentCategory(list: List<Subcategory>): List<Category> {
         if (list.isEmpty()) return emptyList()
 
