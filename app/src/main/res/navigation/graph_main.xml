@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/graph_main"
+    app:startDestination="@id/splashFragment">
+
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="dev.nikhi1.eventbrite.clone.SplashFragment"
+        android:label="SplashFragment" />
+
+    <include-dynamic
+        android:id="@+id/includedGraph"
+        app:moduleName="onboardingFeature"
+        app:graphResName="graph_onboarding"
+        app:graphPackage="dev.nikhi1.eventbrite.onboarding" />
+</navigation>

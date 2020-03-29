@@ -1,0 +1,7 @@
+apply plugin: 'com.android.library'
+apply plugin: 'dev.nikhi1.plugin.android'
+
+dependencies {
+    implementation "junit:junit:${Versions.junit}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
+}

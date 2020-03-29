@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-apply from: 'https://raw.githubusercontent.com/JakeWharton/SdkSearch/master/gradle/projectDependencyGraph.gradle'
+//apply from: 'https://raw.githubusercontent.com/JakeWharton/SdkSearch/master/gradle/projectDependencyGraph.gradle'
 
 apply plugin: 'dev.nikhi1.plugin.android'
 
@@ -10,8 +10,9 @@ android {
         applicationId "dev.nikhi1.eventbrite.clone"
         versionCode 1
         versionName "1.0"
+        resConfigs "en"
     }
-
+    
     dynamicFeatures = [
             ':home',
             ':onboarding',
@@ -21,12 +22,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation Libs.kotlinJDK
-    implementation Libs.appcompat
-    implementation Libs.retrofit
-    implementation Libs.coreKts
+    implementation project(":core")
     implementation Libs.constraintLayout
-    implementation Libs.koinViewModel
-    implementation Libs.coroutines
-    implementation Libs.androidCoroutines
+    implementation Libs.dynamicNav
 }

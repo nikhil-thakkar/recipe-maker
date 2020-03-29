@@ -1,9 +1,14 @@
+import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
+import com.android.build.gradle.api.ApkVariantOutput
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.JavaExec
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.register
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /***
  * This plugin is instantiated every time when you apply the this plugin to build.gradle in feature module
@@ -16,7 +21,10 @@ class AndroidModulePlugin : Plugin<Project> {
             project.plugins.apply("kotlin-android")
             project.plugins.apply("kotlin-android-extensions")
             project.configureAndroidBlock()
-            project.configureCommonDependencies()
+            if (project.name != "test_shared") {
+                project.configureCommonDependencies()
+            }
+            project.configureTestSharedDependencies()
         }
     }
 }
@@ -37,8 +45,14 @@ internal fun Project.configureAndroidBlock() = extensions.getByType<BaseExtensio
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    testOptions {
-        unitTests.isReturnDefaultValues = true
+    tasks.withType(KotlinCompile::class.java).configureEach {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
+
+    afterEvaluate {
+        applyLocalSplitManagerTest(project)
     }
 }
 
@@ -46,6 +60,7 @@ internal fun Project.configureCommonDependencies() {
     //find the app module
     //replace this with your base module if using otherwise
     val app = findProject(":app")
+    val core = findProject(":core")
     extensions.getByType<BaseExtension>().run {
         dependencies {
             if (!(name == "app" || name == "core")) {
@@ -54,10 +69,101 @@ internal fun Project.configureCommonDependencies() {
                 if (app != null) {
                     add("implementation", app)
                 }
+
+                if (core != null) {
+                    add("implementation", core)
+                }
             }
+            add("implementation", Libs.material)
+            add("implementation", Libs.coreKtx)
+            add("implementation", Libs.retrofit)
+            add("implementation", Libs.koinViewModel)
+            add("implementation", Libs.lifecycle)
+            add("implementation", Libs.lifecycleViewModel)
+            add("implementation", Libs.lifecycleViewModelKtx)
+            add("implementation", Libs.lifecycleLiveDataKtx)
+            add("implementation", Libs.coroutines)
+            add("implementation", Libs.androidCoroutines)
+            add("implementation", Libs.gson)
+
+            if (name != "core") {
+                add("implementation", Libs.navFrag)
+                add("implementation", Libs.navUi)
+            }
+        }
+    }
+}
+
+internal fun Project.configureTestSharedDependencies() {
+    val core = findProject(":core")
+    val testShared = findProject(":test_shared")
+    val app = findProject(":app")
+
+    extensions.getByType<BaseExtension>().run {
+        dependencies {
+            if (name == "test_shared") {
+                if (core != null) {
+                    add("implementation", core)
+                }
+                add("implementation", Libs.lifecycle)
+                add("implementation", Libs.lifecycleViewModel)
+                add("implementation", Libs.lifecycleViewModelKtx)
+                add("implementation", Libs.lifecycleLiveDataKtx)
+            }
+            if (testShared != null) {
+                add("testImplementation", testShared)
+            }
+
             add("testImplementation", Libs.junit)
             add("testImplementation", Libs.mockk)
+            add("testImplementation", Libs.coreTesting)
             add("testImplementation", Libs.corountinesTest)
+
+            if (app != null && name != "app" && name != "core" && name != "test_shared") {
+                add("androidTestImplementation", app)
+            }
+
+        }
+    }
+}
+
+internal fun BaseExtension.applyLocalSplitManagerTest(project: Project) {
+
+    if (this is AppExtension && project.name == "app") {
+        val bundletoolJar = project.rootDir.resolve("third_party/bundletool/bundletool-all-0.13.0.jar")
+        this.applicationVariants.all { applicationVariant ->
+            applicationVariant.outputs.filter { it as? ApkVariantOutput != null }
+                .map { it as ApkVariantOutput }
+                .map { apkOutput ->
+                    var filePath = apkOutput.outputFile.absolutePath
+                    filePath = filePath.replaceAfterLast(".", "aab")
+                    filePath = filePath.replace("build/outputs/apk/", "build/outputs/bundle/")
+                    var outputPath = filePath.replace("build/outputs/bundle/", "build/outputs/apks/")
+                    outputPath = outputPath.replaceAfterLast(".", "apks")
+
+                    project.tasks.register<JavaExec>("buildApks${applicationVariant.name.capitalize()}") {
+                        main = "com.android.tools.build.bundletool.BundleToolMain"
+                        classpath = project.files(bundletoolJar)
+                        args = listOf(
+                            "build-apks",
+                            "--overwrite",
+                            "--local-testing",
+                            "--bundle",
+                            filePath,
+                            "--output",
+                            outputPath
+                        )
+                        dependsOn("bundle${applicationVariant.name.capitalize()}")
+                    }
+
+                    project.tasks.register<JavaExec>("installApkSplitsForTest${applicationVariant.name.capitalize()}") {
+                        classpath = project.files(bundletoolJar)
+                        args = listOf("install-apks", "--apks", outputPath)
+                        main = "com.android.tools.build.bundletool.BundleToolMain"
+                        dependsOn("buildApks${applicationVariant.name.capitalize()}")
+                    }
+                }
+            return
         }
     }
 }
