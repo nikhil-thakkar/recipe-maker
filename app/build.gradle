@@ -10,6 +10,7 @@ android {
         applicationId "dev.nikhi1.eventbrite.clone"
         versionCode 1
         versionName "1.0"
+        resConfigs "en"
     }
     
     dynamicFeatures = [
