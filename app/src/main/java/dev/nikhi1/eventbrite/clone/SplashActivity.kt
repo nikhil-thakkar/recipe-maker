@@ -1,10 +1,13 @@
 package dev.nikhi1.eventbrite.clone
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.navigation.dynamicfeatures.fragment.DynamicFragmentNavigator
 import androidx.navigation.findNavController
+import com.google.android.play.core.splitcompat.SplitCompat
+import org.koin.android.ext.android.getKoin
 import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -20,6 +23,11 @@ private var module: Module = module {
 class SplashActivity : AppCompatActivity() {
 
     private val viewModel: SplashViewModel by viewModel()
+
+    override fun attachBaseContext(newBase: Context?) {
+        super.attachBaseContext(newBase)
+        SplitCompat.installActivity(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
