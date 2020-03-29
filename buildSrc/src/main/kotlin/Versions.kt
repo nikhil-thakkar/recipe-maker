@@ -19,6 +19,8 @@ internal object Versions {
     val lifecycle = "2.2.0"
     val material = "1.1.0-rc02"
     val gson = "2.8.6"
+    val navigation = "2.3.0-alpha04"
+    val playCore = "1.6.5"
 }
 
 object Libs {
@@ -36,10 +38,15 @@ object Libs {
     val lifecycleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
     val material = "com.google.android.material:material:${Versions.material}"
     val gson = "com.google.code.gson:gson:${Versions.gson}"
+    val navFrag = "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
+    val navUi = "androidx.navigation:navigation-fragment-ktx:${Versions.navigation}"
+    val dynamicNav = "androidx.navigation:navigation-dynamic-features-fragment:${Versions.navigation}"
+    val playCore = "com.google.android.play:core:${Versions.playCore}"
 
     val junit = "junit:junit:${Versions.junit}"
     val coreTesting = "androidx.arch.core:core-testing:${Versions.coreTesting}"
     val corountinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}"
     val mockk = "io.mockk:mockk:${Versions.mockk}"
+    val navTest = "androidx.navigation:navigation-testing:${Versions.navigation}"
 
 }

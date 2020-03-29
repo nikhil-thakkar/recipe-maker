@@ -1,9 +1,13 @@
+import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
+import com.android.build.gradle.api.ApkVariantOutput
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.JavaExec
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.register
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /***
@@ -46,6 +50,10 @@ internal fun Project.configureAndroidBlock() = extensions.getByType<BaseExtensio
             jvmTarget = "1.8"
         }
     }
+
+    afterEvaluate {
+        applyLocalSplitManagerTest(project)
+    }
 }
 
 internal fun Project.configureCommonDependencies() {
@@ -77,6 +85,11 @@ internal fun Project.configureCommonDependencies() {
             add("implementation", Libs.coroutines)
             add("implementation", Libs.androidCoroutines)
             add("implementation", Libs.gson)
+
+            if (name != "core") {
+                add("implementation", Libs.navFrag)
+                add("implementation", Libs.navUi)
+            }
         }
     }
 }
@@ -110,6 +123,47 @@ internal fun Project.configureTestSharedDependencies() {
                 add("androidTestImplementation", app)
             }
 
+        }
+    }
+}
+
+internal fun BaseExtension.applyLocalSplitManagerTest(project: Project) {
+
+    if (this is AppExtension && project.name == "app") {
+        val bundletoolJar = project.rootDir.resolve("third_party/bundletool/bundletool-all-0.13.0.jar")
+        this.applicationVariants.all { applicationVariant ->
+            applicationVariant.outputs.filter { it as? ApkVariantOutput != null }
+                .map { it as ApkVariantOutput }
+                .map { apkOutput ->
+                    var filePath = apkOutput.outputFile.absolutePath
+                    filePath = filePath.replaceAfterLast(".", "aab")
+                    filePath = filePath.replace("build/outputs/apk/", "build/outputs/bundle/")
+                    var outputPath = filePath.replace("build/outputs/bundle/", "build/outputs/apks/")
+                    outputPath = outputPath.replaceAfterLast(".", "apks")
+
+                    project.tasks.register<JavaExec>("buildApks${applicationVariant.name.capitalize()}") {
+                        main = "com.android.tools.build.bundletool.BundleToolMain"
+                        classpath = project.files(bundletoolJar)
+                        args = listOf(
+                            "build-apks",
+                            "--overwrite",
+                            "--local-testing",
+                            "--bundle",
+                            filePath,
+                            "--output",
+                            outputPath
+                        )
+                        dependsOn("bundle${applicationVariant.name.capitalize()}")
+                    }
+
+                    project.tasks.register<JavaExec>("installApkSplitsForTest${applicationVariant.name.capitalize()}") {
+                        classpath = project.files(bundletoolJar)
+                        args = listOf("install-apks", "--apks", outputPath)
+                        main = "com.android.tools.build.bundletool.BundleToolMain"
+                        dependsOn("buildApks${applicationVariant.name.capitalize()}")
+                    }
+                }
+            return
         }
     }
 }

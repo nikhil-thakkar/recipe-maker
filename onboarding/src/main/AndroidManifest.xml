@@ -9,7 +9,4 @@
         <dist:fusing dist:include="true" />
     </dist:module>
 
-    <application
-        tools:node="replace"/>
-
 </manifest>

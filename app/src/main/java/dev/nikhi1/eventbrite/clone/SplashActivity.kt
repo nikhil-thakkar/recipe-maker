@@ -3,6 +3,9 @@ package dev.nikhi1.eventbrite.clone
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
+import androidx.navigation.dynamicfeatures.fragment.DynamicFragmentNavigator
+import androidx.navigation.findNavController
+import org.koin.androidx.scope.currentScope
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
@@ -21,11 +24,10 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-
         loadKoinModules(module)
 
         viewModel.navigate.observe(this, Observer {
-
+            findNavController(R.id.nav_host_fragment).navigate(R.id.includedGraph)
         })
     }
 
