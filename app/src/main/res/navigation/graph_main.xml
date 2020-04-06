@@ -11,7 +11,7 @@
 
     <include-dynamic
         android:id="@+id/includedGraph"
-        app:moduleName="onboardingFeature"
+        app:moduleName="onboarding"
         app:graphResName="graph_onboarding"
         app:graphPackage="dev.nikhi1.eventbrite.onboarding" />
 </navigation>
