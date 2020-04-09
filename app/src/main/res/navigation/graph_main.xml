@@ -7,10 +7,14 @@
     <fragment
         android:id="@+id/splashFragment"
         android:name="dev.nikhi1.eventbrite.clone.SplashFragment"
-        android:label="SplashFragment" />
+        android:label="SplashFragment">
+        <action
+            android:id="@+id/action_fragment_to_second_graph"
+            app:destination="@id/graph_onboarding" />
+    </fragment>
 
-    <include-dynamic
-        android:id="@+id/includedGraph"
+    <include
+        app:graph="@navigation/graph_onboarding"
         app:moduleName="onboarding"
         app:graphResName="graph_onboarding"
         app:graphPackage="dev.nikhi1.eventbrite.onboarding" />

@@ -1,13 +1,9 @@
-import com.android.build.gradle.AppExtension
 import com.android.build.gradle.BaseExtension
-import com.android.build.gradle.api.ApkVariantOutput
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.JavaExec
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.register
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /***
@@ -18,13 +14,16 @@ class AndroidModulePlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         if (project.hasProperty("android")) {
-            project.plugins.apply("kotlin-android")
-            project.plugins.apply("kotlin-android-extensions")
-            project.configureAndroidBlock()
-            if (project.name != "test_shared") {
-                project.configureCommonDependencies()
+            with(project) {
+                plugins.apply("kotlin-android")
+                plugins.apply("kotlin-android-extensions")
+                configureAndroidBlock()
+                if (name != "test_shared") {
+                    configureCommonDependencies()
+                }
+                configureTestSharedDependencies()
+                configureCoreModuleForOtherModules()
             }
-            project.configureTestSharedDependencies()
         }
     }
 }
@@ -47,33 +46,15 @@ internal fun Project.configureAndroidBlock() = extensions.getByType<BaseExtensio
 
     tasks.withType(KotlinCompile::class.java).configureEach {
         kotlinOptions {
-            jvmTarget = "1.8"
+            jvmTarget = JavaVersion.VERSION_1_8.toString()
         }
-    }
-
-    afterEvaluate {
-        applyLocalSplitManagerTest(project)
     }
 }
 
 internal fun Project.configureCommonDependencies() {
-    //find the app module
-    //replace this with your base module if using otherwise
-    val app = findProject(":app")
-    val core = findProject(":core")
+
     extensions.getByType<BaseExtension>().run {
         dependencies {
-            if (!(name == "app" || name == "core")) {
-                // Since the feature modules need to depend on the :app or the base module
-                //Don't add the app to itself or to core
-                if (app != null) {
-                    add("implementation", app)
-                }
-
-                if (core != null) {
-                    add("implementation", core)
-                }
-            }
             add("implementation", Libs.material)
             add("implementation", Libs.coreKtx)
             add("implementation", Libs.retrofit)
@@ -122,48 +103,21 @@ internal fun Project.configureTestSharedDependencies() {
             if (app != null && name != "app" && name != "core" && name != "test_shared") {
                 add("androidTestImplementation", app)
             }
-
         }
     }
 }
 
-internal fun BaseExtension.applyLocalSplitManagerTest(project: Project) {
+internal fun Project.configureCoreModuleForOtherModules() {
+    if (name == "core") return
+    val core = findProject(":core") as Project
 
-    if (this is AppExtension && project.name == "app") {
-        val bundletoolJar = project.rootDir.resolve("third_party/bundletool/bundletool-all-0.13.0.jar")
-        this.applicationVariants.all { applicationVariant ->
-            applicationVariant.outputs.filter { it as? ApkVariantOutput != null }
-                .map { it as ApkVariantOutput }
-                .map { apkOutput ->
-                    var filePath = apkOutput.outputFile.absolutePath
-                    filePath = filePath.replaceAfterLast(".", "aab")
-                    filePath = filePath.replace("build/outputs/apk/", "build/outputs/bundle/")
-                    var outputPath = filePath.replace("build/outputs/bundle/", "build/outputs/apks/")
-                    outputPath = outputPath.replaceAfterLast(".", "apks")
-
-                    project.tasks.register<JavaExec>("buildApks${applicationVariant.name.capitalize()}") {
-                        main = "com.android.tools.build.bundletool.BundleToolMain"
-                        classpath = project.files(bundletoolJar)
-                        args = listOf(
-                            "build-apks",
-                            "--overwrite",
-                            "--local-testing",
-                            "--bundle",
-                            filePath,
-                            "--output",
-                            outputPath
-                        )
-                        dependsOn("bundle${applicationVariant.name.capitalize()}")
-                    }
-
-                    project.tasks.register<JavaExec>("installApkSplitsForTest${applicationVariant.name.capitalize()}") {
-                        classpath = project.files(bundletoolJar)
-                        args = listOf("install-apks", "--apks", outputPath)
-                        main = "com.android.tools.build.bundletool.BundleToolMain"
-                        dependsOn("buildApks${applicationVariant.name.capitalize()}")
-                    }
+    extensions.getByName("android").apply {
+        when (this) {
+            is BaseExtension -> {
+                dependencies {
+                    add("implementation", core)
                 }
-            return
+            }
         }
     }
 }

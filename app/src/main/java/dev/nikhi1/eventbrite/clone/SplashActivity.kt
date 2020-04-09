@@ -35,7 +35,7 @@ class SplashActivity : AppCompatActivity() {
         loadKoinModules(module)
 
         viewModel.navigate.observe(this, Observer {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.includedGraph)
+            findNavController(R.id.nav_host_fragment).navigate(R.id.action_fragment_to_second_graph)
         })
     }
 
