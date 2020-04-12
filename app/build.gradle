@@ -1,7 +1,4 @@
 apply plugin: 'com.android.application'
-
-//apply from: 'https://raw.githubusercontent.com/JakeWharton/SdkSearch/master/gradle/projectDependencyGraph.gradle'
-
 apply plugin: 'dev.nikhi1.plugin.android'
 
 android {
@@ -12,17 +9,15 @@ android {
         versionName "1.0"
         resConfigs "en"
     }
-    
-    dynamicFeatures = [
-            ':home',
-            ':onboarding',
-            ':search'
-    ]
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation project(":core")
+
     implementation Libs.constraintLayout
     implementation Libs.dynamicNav
+
+    implementation project(":home")
+    implementation project(":onboarding")
+    implementation project(":search")
 }

@@ -1,12 +1,4 @@
 <manifest xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
     package="dev.nikhi1.eventbrite.onboarding">
-
-    <dist:module dist:title="@string/title_onboarding">
-        <dist:delivery>
-            <dist:install-time />
-        </dist:delivery>
-        <dist:fusing dist:include="true" />
-    </dist:module>
-
 </manifest>
