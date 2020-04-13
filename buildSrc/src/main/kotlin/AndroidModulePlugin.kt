@@ -30,12 +30,12 @@ class AndroidModulePlugin : Plugin<Project> {
 
 internal fun Project.configureAndroidBlock() = extensions.getByType<BaseExtension>().run {
 
-    buildToolsVersion(Versions.buildTools)
-    compileSdkVersion(Versions.compileSDK)
+    buildToolsVersion(Versions.Android.buildTools)
+    compileSdkVersion(Versions.Android.compileSDK)
 
     defaultConfig {
-        minSdkVersion(Versions.minSDK)
-        targetSdkVersion(Versions.targetSDK)
+        minSdkVersion(Versions.Android.minSDK)
+        targetSdkVersion(Versions.Android.targetSDK)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -55,21 +55,20 @@ internal fun Project.configureCommonDependencies() {
 
     extensions.getByType<BaseExtension>().run {
         dependencies {
-            add("implementation", Libs.material)
-            add("implementation", Libs.coreKtx)
-            add("implementation", Libs.retrofit)
+            add("implementation", Libs.Design.material)
+            add("implementation", Libs.AndroidX.coreKtx)
+            add("implementation", Libs.Networking.retrofit)
             add("implementation", Libs.koinViewModel)
-            add("implementation", Libs.lifecycle)
-            add("implementation", Libs.lifecycleViewModel)
-            add("implementation", Libs.lifecycleViewModelKtx)
-            add("implementation", Libs.lifecycleLiveDataKtx)
+            add("implementation", Libs.AndroidX.Lifecycle.ext)
+            add("implementation", Libs.AndroidX.Lifecycle.viewModel)
+            add("implementation", Libs.AndroidX.Lifecycle.viewModelKtx)
+            add("implementation", Libs.AndroidX.Lifecycle.liveDataKtx)
             add("implementation", Libs.coroutines)
-            add("implementation", Libs.androidCoroutines)
-            add("implementation", Libs.gson)
+            add("implementation", Libs.AndroidX.coroutines)
+            add("implementation", Libs.Networking.gson)
 
             if (name != "core") {
-                add("implementation", Libs.navFrag)
-                add("implementation", Libs.navUi)
+                add("implementation", Libs.AndroidX.Navigation.navigator)
             }
         }
     }
@@ -86,19 +85,19 @@ internal fun Project.configureTestSharedDependencies() {
                 if (core != null) {
                     add("implementation", core)
                 }
-                add("implementation", Libs.lifecycle)
-                add("implementation", Libs.lifecycleViewModel)
-                add("implementation", Libs.lifecycleViewModelKtx)
-                add("implementation", Libs.lifecycleLiveDataKtx)
+                add("implementation", Libs.AndroidX.Lifecycle.ext)
+                add("implementation", Libs.AndroidX.Lifecycle.viewModel)
+                add("implementation", Libs.AndroidX.Lifecycle.viewModelKtx)
+                add("implementation", Libs.AndroidX.Lifecycle.liveDataKtx)
             }
             if (testShared != null) {
                 add("testImplementation", testShared)
             }
 
-            add("testImplementation", Libs.junit)
-            add("testImplementation", Libs.mockk)
-            add("testImplementation", Libs.coreTesting)
-            add("testImplementation", Libs.corountinesTest)
+            add("testImplementation", Libs.Testing.junit)
+            add("testImplementation", Libs.Testing.mockk)
+            add("testImplementation", Libs.Testing.archCore)
+            add("testImplementation", Libs.Testing.corountines)
 
             if (app != null && name != "app" && name != "core" && name != "test_shared") {
                 add("androidTestImplementation", app)

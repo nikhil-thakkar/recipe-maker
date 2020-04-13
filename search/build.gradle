@@ -1,3 +1,0 @@
-apply plugin: 'com.android.library'
-apply plugin: 'dev.nikhi1.plugin.android'
-
