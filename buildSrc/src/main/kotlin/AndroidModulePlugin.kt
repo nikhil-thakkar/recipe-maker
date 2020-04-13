@@ -23,6 +23,7 @@ class AndroidModulePlugin : Plugin<Project> {
                 }
                 configureTestSharedDependencies()
                 configureCoreModuleForOtherModules()
+                configureTestSharedModuleForOtherModules()
             }
         }
     }
@@ -75,33 +76,24 @@ internal fun Project.configureCommonDependencies() {
 }
 
 internal fun Project.configureTestSharedDependencies() {
+    if (name != "test_shared") return
     val core = findProject(":core")
-    val testShared = findProject(":test_shared")
-    val app = findProject(":app")
 
     extensions.getByType<BaseExtension>().run {
         dependencies {
-            if (name == "test_shared") {
-                if (core != null) {
-                    add("implementation", core)
-                }
-                add("implementation", Libs.AndroidX.Lifecycle.ext)
-                add("implementation", Libs.AndroidX.Lifecycle.viewModel)
-                add("implementation", Libs.AndroidX.Lifecycle.viewModelKtx)
-                add("implementation", Libs.AndroidX.Lifecycle.liveDataKtx)
-            }
-            if (testShared != null) {
-                add("testImplementation", testShared)
-            }
 
-            add("testImplementation", Libs.Testing.junit)
-            add("testImplementation", Libs.Testing.mockk)
-            add("testImplementation", Libs.Testing.archCore)
-            add("testImplementation", Libs.Testing.corountines)
-
-            if (app != null && name != "app" && name != "core" && name != "test_shared") {
-                add("androidTestImplementation", app)
+            if (core != null) {
+                add("implementation", core)
             }
+            add("implementation", Libs.AndroidX.Lifecycle.ext)
+            add("implementation", Libs.AndroidX.Lifecycle.viewModel)
+            add("implementation", Libs.AndroidX.Lifecycle.viewModelKtx)
+            add("implementation", Libs.AndroidX.Lifecycle.liveDataKtx)
+
+            add("implementation", Libs.Testing.junit)
+            add("implementation", Libs.Testing.mockk)
+            add("implementation", Libs.Testing.archCore)
+            add("implementation", Libs.Testing.corountines)
         }
     }
 }
@@ -109,12 +101,29 @@ internal fun Project.configureTestSharedDependencies() {
 internal fun Project.configureCoreModuleForOtherModules() {
     if (name == "core") return
     val core = findProject(":core") as Project
-
     extensions.getByName("android").apply {
         when (this) {
             is BaseExtension -> {
                 dependencies {
                     add("implementation", core)
+                }
+            }
+        }
+    }
+}
+
+internal fun Project.configureTestSharedModuleForOtherModules() {
+    if (name == "test_shared") return
+    val test_shared = findProject(":test_shared") as Project
+    extensions.getByName("android").apply {
+        when (this) {
+            is BaseExtension -> {
+                dependencies {
+                    add("testImplementation", test_shared)
+                    add("testImplementation", Libs.Testing.junit)
+                    add("testImplementation", Libs.Testing.mockk)
+                    add("testImplementation", Libs.Testing.archCore)
+                    add("testImplementation", Libs.Testing.corountines)
                 }
             }
         }
