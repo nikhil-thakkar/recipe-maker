@@ -25,6 +25,7 @@ internal object Versions {
     object Networking {
         val retrofit = "2.3.0"
         val gson = "2.8.6"
+        val responseConverter = "2.8.1"
     }
 
     object Testing {
@@ -67,6 +68,7 @@ object Libs {
     object Networking {
         val retrofit = "com.squareup.retrofit2:retrofit:${Versions.Networking.retrofit}"
         val gson = "com.google.code.gson:gson:${Versions.Networking.gson}"
+        val responseConverter = "com.squareup.retrofit2:converter-gson:${Versions.Networking.responseConverter}"
     }
 
     object Testing {

@@ -17,6 +17,7 @@ class AndroidModulePlugin : Plugin<Project> {
             with(project) {
                 plugins.apply("kotlin-android")
                 plugins.apply("kotlin-android-extensions")
+                plugins.apply("kotlin-kapt")
                 configureAndroidBlock()
                 if (name != "test_shared") {
                     configureCommonDependencies()
@@ -45,6 +46,8 @@ internal fun Project.configureAndroidBlock() = extensions.getByType<BaseExtensio
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
+    dataBinding.isEnabled = true
+
     tasks.withType(KotlinCompile::class.java).configureEach {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_1_8.toString()
@@ -67,6 +70,7 @@ internal fun Project.configureCommonDependencies() {
             add("implementation", Libs.coroutines)
             add("implementation", Libs.AndroidX.coroutines)
             add("implementation", Libs.Networking.gson)
+            add("implementation", Libs.Networking.responseConverter)
 
             if (name != "core") {
                 add("implementation", Libs.AndroidX.Navigation.navigator)

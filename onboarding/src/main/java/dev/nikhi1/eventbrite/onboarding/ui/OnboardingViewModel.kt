@@ -13,11 +13,12 @@ import dev.nikhi1.eventbrite.onboarding.data.DataRepository
 import dev.nikhi1.eventbrite.onboarding.data.model.SubCategoryResponse
 import dev.nikhi1.eventbrite.onboarding.data.model.Subcategory
 import dev.nikhi1.eventbrite.onboarding.ui.model.Category
+import dev.nikhi1.eventbrite.onboarding.ui.model.CategoryViewType
 import kotlinx.coroutines.launch
 
 data class OnboardingViewState(
     val uiState: UIState = UIState.Loading,
-    val categories: List<Category> = emptyList()
+    val categories: List<CategoryViewType> = emptyList()
 ) : ViewState
 
 class OnboardingViewModel(private val dataRepository: DataRepository) : BaseViewModel<OnboardingViewState>() {
@@ -38,7 +39,9 @@ class OnboardingViewModel(private val dataRepository: DataRepository) : BaseView
                     val data = result.data ?: SubCategoryResponse.EMPTY
                     if (data.subcategories.isNotEmpty()) {
                         _viewState.value =
-                            _viewState.value.copy(uiState = UIState.Content, categories = groupSubcategoryByParentCategory(data.subcategories))
+                            _viewState.value.copy(uiState = UIState.Content, categories = groupSubcategoryByParentCategory(data.subcategories).map {
+                                CategoryViewType(it)
+                            })
                     } else {
                         _viewState.value = _viewState.value.copy(uiState = UIState.Empty)
                     }
