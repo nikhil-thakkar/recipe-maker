@@ -22,9 +22,10 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 
 private var module: Module = module {
-    viewModel { OnboardingViewModel(get()) }
+    viewModel { OnboardingViewModel(get(), get()) }
     factory { CategoryRepository(get()) as DataRepository }
     factory { provideCategoryAPI(get()) }
+    factory { CategoryPresenter() }
 }
 
 private fun provideCategoryAPI(retrofit: Retrofit) = retrofit.create(CategoryAPI::class.java)

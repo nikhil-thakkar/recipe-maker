@@ -21,7 +21,7 @@ data class OnboardingViewState(
     val categories: List<CategoryViewType> = emptyList()
 ) : ViewState
 
-class OnboardingViewModel(private val dataRepository: DataRepository) : BaseViewModel<OnboardingViewState>() {
+class OnboardingViewModel(private val categoryPresenter: CategoryPresenter, private val dataRepository: DataRepository) : BaseViewModel<OnboardingViewState>() {
 
     private val _viewState = ViewStateLiveData(
         OnboardingViewState()
@@ -39,9 +39,7 @@ class OnboardingViewModel(private val dataRepository: DataRepository) : BaseView
                     val data = result.data ?: SubCategoryResponse.EMPTY
                     if (data.subcategories.isNotEmpty()) {
                         _viewState.value =
-                            _viewState.value.copy(uiState = UIState.Content, categories = groupSubcategoryByParentCategory(data.subcategories).map {
-                                CategoryViewType(it)
-                            })
+                            _viewState.value.copy(uiState = UIState.Content, categories = categoryPresenter.map(groupSubcategoryByParentCategory(data.subcategories)))
                     } else {
                         _viewState.value = _viewState.value.copy(uiState = UIState.Empty)
                     }
