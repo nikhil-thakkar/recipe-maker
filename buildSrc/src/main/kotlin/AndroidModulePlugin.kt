@@ -2,8 +2,12 @@ import com.android.build.gradle.BaseExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.withType
+import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 /***
@@ -17,6 +21,7 @@ class AndroidModulePlugin : Plugin<Project> {
             with(project) {
                 plugins.apply("kotlin-android")
                 plugins.apply("kotlin-android-extensions")
+                plugins.apply("com.hiya.jacoco-android")
                 configureAndroidBlock()
                 if (name != "test_shared") {
                     configureCommonDependencies()
@@ -24,6 +29,17 @@ class AndroidModulePlugin : Plugin<Project> {
                 configureTestSharedDependencies()
                 configureCoreModuleForOtherModules()
                 configureTestSharedModuleForOtherModules()
+            }
+
+            project.extensions.getByType<JacocoPluginExtension>().run {
+                toolVersion = "0.8.4"
+                //configure other properties if needed
+            }
+
+            project.tasks.withType<Test>() {
+                extensions.getByType<JacocoTaskExtension>().run {
+                    isIncludeNoLocationClasses = true
+                }
             }
         }
     }
@@ -48,6 +64,12 @@ internal fun Project.configureAndroidBlock() = extensions.getByType<BaseExtensio
     tasks.withType(KotlinCompile::class.java).configureEach {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_1_8.toString()
+        }
+    }
+
+    testOptions {
+        unitTests.apply {
+            isReturnDefaultValues = true
         }
     }
 }
