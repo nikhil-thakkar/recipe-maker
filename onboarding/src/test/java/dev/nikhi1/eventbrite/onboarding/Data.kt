@@ -6,6 +6,7 @@ import dev.nikhi1.eventbrite.onboarding.data.model.Category
 import dev.nikhi1.eventbrite.onboarding.data.model.Pagination
 import dev.nikhi1.eventbrite.onboarding.data.model.SubCategoryResponse
 import dev.nikhi1.eventbrite.onboarding.data.model.Subcategory
+import dev.nikhi1.eventbrite.onboarding.ui.model.CategoryViewType
 import java.lang.reflect.Type
 import dev.nikhi1.eventbrite.onboarding.ui.model.Category as UICategory
 
@@ -50,6 +51,10 @@ object TestData {
         val categoryListType: Type = object :
             TypeToken<List<UICategory>>(){}.type
         gson.fromJson<List<UICategory>>(subcategoryByParentJson, categoryListType)
+    }
+
+    val categoryViewTypes: List<CategoryViewType> by lazy {
+        subcategoryByParent.map { CategoryViewType(it) }
     }
 
     private fun getTextInFile(fileName: String): String? =

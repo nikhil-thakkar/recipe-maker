@@ -6,6 +6,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.context.loadKoinModules
 import org.koin.dsl.module
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 val <T> T.exhaustive: T
     get() = this
@@ -25,6 +26,7 @@ object Core {
         return Retrofit.Builder().apply {
             baseUrl(baseUrl)
             client(okHttpClient)
+            addConverterFactory(GsonConverterFactory.create())
         }.build()
     }
 
