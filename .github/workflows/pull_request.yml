@@ -24,7 +24,4 @@ jobs:
      - name: SonarCloud Scan
        run: sonar-scanner
          -Dsonar.login=${{ secrets.sonar_cloud_token }}
-         -Dsonar.organization=nikhil-thakkar
          -Dsonar.host.url=https://sonarcloud.io/
-         -Dsonar.projectKey=nikhil-thakkar_eventbrite-clone
-         -Dsonar.java.coveragePlugin=jacoco
