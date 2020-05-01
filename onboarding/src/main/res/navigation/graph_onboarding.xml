@@ -2,7 +2,6 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/graph_onboarding"
-    app:moduleName="onboarding"
     app:startDestination="@id/onboardingFragment">
 
     <fragment

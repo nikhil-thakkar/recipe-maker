@@ -18,6 +18,10 @@ dependencies {
     /* Depend on the android gradle plugin, since we want to access it in our plugin */
     implementation("com.android.tools.build:gradle:4.1.0-alpha04")
 
+    implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.8.0.1969")
+
+    //implementation("org.jacoco:org.jacoco.core:0.8.5")
+
     implementation("com.hiya:jacoco-android:0.2")
 
     /* Depend on the default Gradle API's since we want to build a custom plugin */

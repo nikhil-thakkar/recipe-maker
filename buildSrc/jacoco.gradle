@@ -1,0 +1,84 @@
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = "0.8.5"
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
+def mainSrc = "$project.projectDir/src/main/java"
+
+def executionDataFiles = [
+        'jacoco/test.exec',
+        'jacoco/testDebugUnitTest.exec',
+        'outputs/code-coverage/connected/*coverage.ec'
+]
+
+subprojects { subproject ->
+    afterEvaluate {
+        subproject.apply plugin: 'jacoco'
+
+        // TODO WORKAROUND: subproject.plugins.withType is not correctly detecting Android projects
+        subproject.plugins.each { plugin ->
+            if (subproject.hasProperty('excludeFromCoverage') && subproject.excludeFromCoverage) {
+                logger.info "Excluding $subproject from coverage measurement"
+                return
+            }
+
+            if (isAndroidLibrary(plugin) || isAndroidApp(plugin)) {
+                android.jacoco.version = "0.8.5"
+
+                logger.info "Applying Android JaCoCo task for $subproject"
+                task jacocoTestReport(
+                        type: JacocoReport,
+                        dependsOn: ['testDebugUnitTest', 'createDebugCoverageReport']
+                ) {
+                    reports {
+                        xml.enabled = true
+                        html.enabled = true
+                    }
+
+                    sourceDirectories.setFrom files([mainSrc])
+
+                    def javaClassDir = "$project.buildDir/intermediates/classes/debug"
+                    def kotlinClassDir = "$project.buildDir/tmp/kotlin-classes/debug"
+                    classDirectories.setFrom fileTree(javaClassDir) + fileTree(kotlinClassDir)
+
+                    executionData.setFrom fileTree(dir: project.buildDir, includes: executionDataFiles)
+                }
+            } else if (isJvmLibrary(plugin)) {
+                logger.info "Applying Java JaCoCo task for $subproject"
+                jacocoTestReport {
+                    dependsOn test
+                    reports {
+                        xml.enabled = true
+                        html.enabled = true
+                    }
+
+                    sourceDirectories.setFrom files([mainSrc])
+
+                    def javaClassDir = "$project.buildDir/classes/java/main"
+                    def kotlinClassDir = "$project.buildDir/classes/kotlin/main"
+                    classDirectories.setFrom fileTree(javaClassDir) + fileTree(kotlinClassDir)
+
+                    executionData.setFrom fileTree(dir: project.buildDir, includes: executionDataFiles)
+                }
+            }
+            return
+        }
+    }
+}
+
+private static boolean isAndroidLibrary(plugin) {
+    plugin.toString().contains('com.android.build.gradle.LibraryPlugin')
+}
+
+private static boolean isAndroidApp(plugin) {
+    plugin.toString().contains('com.android.build.gradle.AppPlugin')
+}
+
+private static boolean isJvmLibrary(plugin) {
+    plugin instanceof JavaLibraryPlugin
+}
