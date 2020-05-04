@@ -15,10 +15,8 @@ jobs:
        uses: actions/setup-java@v1
        with:
         java-version: 1.8
-     - name: Run unit tests
-       run: bash ./gradlew test
-     - name: Run Code Coverage
-       run: bash ./gradlew jacocoTestReport
+     - name: Run unit tests and Code Coverage
+       run: bash ./gradlew jacocoTestDebugUnitTestReport
      - name: Setup sonarqube
        uses: warchant/setup-sonar-scanner@v1
      - name: SonarCloud Scan
