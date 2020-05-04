@@ -159,7 +159,7 @@ internal fun Project.configureSonarqube() {
                 property("sonar.sources", "src/main/java")
                 property("sonar.sources.coveragePlugin", "jacoco")
                 property("sonar.host.url", "https://sonarcloud.io/")
-                property("sonar.exclusions", "**/*.js")
+                property("sonar.exclusions", "**/*.js,**/test/**")
             }
         }
     }
