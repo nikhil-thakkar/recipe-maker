@@ -2,16 +2,11 @@ import com.android.build.gradle.BaseExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.withType
-import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
-import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.sonarqube.gradle.SonarQubeExtension
-import org.sonarqube.gradle.SonarQubeProperties
 
 /***
  * This plugin is instantiated every time when you apply the this plugin to build.gradle in feature module
@@ -25,8 +20,7 @@ class AndroidModulePlugin : Plugin<Project> {
                 plugins.apply("kotlin-android")
                 plugins.apply("kotlin-android-extensions")
                 plugins.apply("kotlin-kapt")
-                //plugins.apply("com.hiya.jacoco-android")
-
+                plugins.apply("com.hiya.jacoco-android")
                 configureSonarqube()
                 configureJacoco()
                 configureAndroidBlock()
@@ -73,7 +67,7 @@ internal fun Project.configureAndroidBlock() = extensions.getByType<BaseExtensio
 
     buildTypes {
         getByName("debug") {
-            isTestCoverageEnabled = true
+            isTestCoverageEnabled = false
         }
     }
 }
@@ -166,22 +160,22 @@ internal fun Project.configureSonarqube() {
                 property("sonar.sources.coveragePlugin", "jacoco")
                 property("sonar.host.url", "https://sonarcloud.io/")
                 property("sonar.exclusions", "**/*.js")
-                property("sonar.login", "")
             }
         }
     }
 }
 
 internal fun Project.configureJacoco() {
+    if(name == "test_shared") return
+
     apply("${rootDir}/buildSrc/jacoco.gradle")
     apply("https://raw.githubusercontent.com/JakeWharton/SdkSearch/master/gradle/projectDependencyGraph.gradle")
     extensions.getByType<SonarQubeExtension>().run {
         properties {
             property(
                 "sonar.coverage.jacoco.xmlReportPaths",
-                "${buildDir}/reports/jacoco/debug/jacoco.xml"
+                "${buildDir}/jacoco/jacoco.xml"
             )
         }
-
     }
 }
