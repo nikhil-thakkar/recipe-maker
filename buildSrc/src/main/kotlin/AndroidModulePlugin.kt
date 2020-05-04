@@ -2,9 +2,11 @@ import com.android.build.gradle.BaseExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.sonarqube.gradle.SonarQubeExtension
 
 /***
  * This plugin is instantiated every time when you apply the this plugin to build.gradle in feature module
@@ -18,12 +20,15 @@ class AndroidModulePlugin : Plugin<Project> {
                 plugins.apply("kotlin-android")
                 plugins.apply("kotlin-android-extensions")
                 plugins.apply("kotlin-kapt")
+                plugins.apply("com.hiya.jacoco-android")
+                configureSonarqube()
+                configureJacoco()
                 configureAndroidBlock()
                 if (name != "test_shared") {
                     configureCommonDependencies()
+                    configureCoreModuleForOtherModules()
                 }
                 configureTestSharedDependencies()
-                configureCoreModuleForOtherModules()
                 configureTestSharedModuleForOtherModules()
             }
         }
@@ -51,6 +56,18 @@ internal fun Project.configureAndroidBlock() = extensions.getByType<BaseExtensio
     tasks.withType(KotlinCompile::class.java).configureEach {
         kotlinOptions {
             jvmTarget = JavaVersion.VERSION_1_8.toString()
+        }
+    }
+
+    testOptions {
+        unitTests.apply {
+            isReturnDefaultValues = true
+        }
+    }
+
+    buildTypes {
+        getByName("debug") {
+            isTestCoverageEnabled = false
         }
     }
 }
@@ -81,14 +98,10 @@ internal fun Project.configureCommonDependencies() {
 
 internal fun Project.configureTestSharedDependencies() {
     if (name != "test_shared") return
-    val core = findProject(":core")
 
     extensions.getByType<BaseExtension>().run {
         dependencies {
 
-            if (core != null) {
-                add("implementation", core)
-            }
             add("implementation", Libs.AndroidX.Lifecycle.ext)
             add("implementation", Libs.AndroidX.Lifecycle.viewModel)
             add("implementation", Libs.AndroidX.Lifecycle.viewModelKtx)
@@ -130,6 +143,39 @@ internal fun Project.configureTestSharedModuleForOtherModules() {
                     add("testImplementation", Libs.Testing.corountines)
                 }
             }
+        }
+    }
+}
+
+internal fun Project.configureSonarqube() {
+    val plugin = rootProject.plugins.findPlugin("org.sonarqube")
+    if (plugin == null) {
+        println("Applying sonar qube")
+        rootProject.plugins.apply("org.sonarqube")
+        rootProject.extensions.getByType<SonarQubeExtension>().run {
+            properties {
+                property("sonar.projectKey", "nikhil-thakkar_eventbrite-clone")
+                property("sonar.organization", "nikhil-thakkar")
+                property("sonar.sources", "src/main/java")
+                property("sonar.sources.coveragePlugin", "jacoco")
+                property("sonar.host.url", "https://sonarcloud.io/")
+                property("sonar.exclusions", "**/*.js,**/test/**")
+            }
+        }
+    }
+}
+
+internal fun Project.configureJacoco() {
+    if(name == "test_shared") return
+
+    apply("${rootDir}/buildSrc/jacoco.gradle")
+    apply("https://raw.githubusercontent.com/JakeWharton/SdkSearch/master/gradle/projectDependencyGraph.gradle")
+    extensions.getByType<SonarQubeExtension>().run {
+        properties {
+            property(
+                "sonar.coverage.jacoco.xmlReportPaths",
+                "${buildDir}/jacoco/jacoco.xml"
+            )
         }
     }
 }

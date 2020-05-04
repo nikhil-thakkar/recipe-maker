@@ -1,4 +1,4 @@
-internal object Versions {
+object Versions {
 
     const val koin = "2.0.1"
     const val kotlin = "1.3.41"
