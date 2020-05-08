@@ -19,7 +19,7 @@ jobs:
        run: ./detect_module_changes.sh
      - name: Run unit tests and Code Coverage
        if: env.build_commands != ''
-       run: bash ./gradlew clean env.$build_commands
+       run: bash ./gradlew clean $build_commands
      - name: Setup sonarqube
        if: env.build_commands != ''
        uses: warchant/setup-sonar-scanner@v1
