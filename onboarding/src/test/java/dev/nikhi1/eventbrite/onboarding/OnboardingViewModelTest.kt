@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import dev.nikhi1.eventbrite.core.Result
 import dev.nikhi1.eventbrite.core.UIState
 import dev.nikhi1.eventbrite.onboarding.data.DataRepository
+import dev.nikhi1.eventbrite.onboarding.data.model.SubCategoryResponse
 import dev.nikhi1.eventbrite.onboarding.ui.CategoryPresenter
 import dev.nikhi1.eventbrite.onboarding.ui.OnboardingViewModel
 import dev.nikhi1.eventbrite.onboarding.ui.OnboardingViewState
@@ -82,6 +83,14 @@ class OnboardingViewModelTest {
         coroutinesRule.runBlocking {
             val subs = TestData.subcategoryNetworkResponse.subcategories
             assertEquals(TestData.subcategoryByParent, viewModel.groupSubcategoryByParentCategory(subs))
+        }
+    }
+
+    @Test
+    fun `return empty list for empty input list for subcategories sorting`() {
+        coroutinesRule.runBlocking {
+            val subs = SubCategoryResponse.EMPTY.subcategories
+            assertEquals(0, viewModel.groupSubcategoryByParentCategory(subs).size)
         }
     }
 }
