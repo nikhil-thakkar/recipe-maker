@@ -20,6 +20,7 @@ object Versions {
         object Lifecycle {
             const val common = "2.2.0"
         }
+
     }
 
     object Networking {
