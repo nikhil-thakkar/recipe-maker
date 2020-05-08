@@ -52,6 +52,7 @@ done
 if [[ $build_commands == "" ]]; then
     echo "Skip unit tests...."
 fi
-echo "::set-env name=build_commands::$build_commands"
 
 # Pass the commands to next step
+echo "::set-env name=build_commands::$build_commands"
+exit 0
