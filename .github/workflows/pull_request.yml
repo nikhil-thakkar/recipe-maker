@@ -15,6 +15,8 @@ jobs:
        uses: actions/setup-java@v1
        with:
         java-version: 1.8
+     - name: Verify gradle wrapper
+       uses: gradle/wrapper-validation-action@v1
      - name: Detecting changes
        run: ./detect_module_changes.sh
      - name: Run unit tests and Code Coverage
