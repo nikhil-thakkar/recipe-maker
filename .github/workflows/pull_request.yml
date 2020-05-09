@@ -15,6 +15,13 @@ jobs:
        uses: actions/setup-java@v1
        with:
         java-version: 1.8
+     - name: Try to restore gradle cache from earlier build
+       uses: actions/cache@v1
+       with:
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        path: ~/.gradle/caches
+        restore-keys: |
+          ${{ runner.os }}-gradle-
      - name: Verify gradle wrapper
        uses: gradle/wrapper-validation-action@v1
      - name: Detecting changes
