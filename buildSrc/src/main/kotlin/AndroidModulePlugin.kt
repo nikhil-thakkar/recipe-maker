@@ -161,6 +161,7 @@ internal fun Project.configureSonarqube() {
                 property("sonar.host.url", "https://sonarcloud.io/")
                 property("sonar.exclusions", "**/*.js,**/test/**, buildSrc/*")
                 property("sonar.login", "")
+
             }
         }
     }
