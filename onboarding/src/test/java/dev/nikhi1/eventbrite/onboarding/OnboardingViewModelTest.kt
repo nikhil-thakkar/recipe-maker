@@ -66,6 +66,17 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `no topics or interests`() {
+        coroutinesRule.runBlocking {
+            val uiState =
+                OnboardingViewState(uiState = UIState.Empty)
+            coEvery {  dataRepository.getTopics(any()) } returns Result.Success(null)
+            viewModel.fetchTopics()
+            assertEquals(uiState, viewModel.viewState.getOrAwaitValue())
+        }
+    }
+
+    @Test
     fun `failed fetch topics or interests`() {
         coroutinesRule.runBlocking {
             val ioException = IOException()
