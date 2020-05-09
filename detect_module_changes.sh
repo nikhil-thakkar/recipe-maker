@@ -30,7 +30,7 @@ command=$(git diff --name-only origin/master)
 # Get all the modules that were changed
 while read -r line; do
   module_name="${line%%/*}"
-  if [[ ${MODULES} != *"${module_name}"* ]]; then
+  if [[ ${module_name} != "buildSrc" && ${MODULES} != *"${module_name}"* ]]; then
     MODULES="${MODULES} ${module_name}"
   fi
 done <<< "$command"
