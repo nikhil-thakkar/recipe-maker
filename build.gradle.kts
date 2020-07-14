@@ -17,12 +17,3 @@ allprojects {
 tasks.create<Delete>("clean") {
     delete(rootProject.buildDir)
 }
-
-allprojects {
-    configurations.all {
-        resolutionStrategy {
-            force("org.objenesis:objenesis:2.6")
-        }
-    }
-    
-}
