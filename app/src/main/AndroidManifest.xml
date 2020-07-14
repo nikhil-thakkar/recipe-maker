@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.nikhi1.eventbrite.clone"
+    package="dev.nikhi1.recipe.maker"
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -11,9 +11,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:name=".EventBriteApp"
+        android:name="dev.nikhi1.recipe.maker.RecipeMaker"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name="dev.nikhi1.recipe.maker.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

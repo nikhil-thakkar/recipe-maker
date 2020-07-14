@@ -6,7 +6,7 @@ plugins {
 android {
 
     defaultConfig {
-        applicationId = "dev.nikhi1.eventbrite.clone"
+        applicationId = "dev.nikhi1.recipe.maker"
         versionCode = 1
         versionName = "1.0"
         resConfigs("en")

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Event-Clone</string>
+    <string name="app_name">Recipe Maker</string>
     <string name="title_onboarding">OnBoarding</string>
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
-    package="dev.nikhi1.eventbrite.search">
+    package="dev.nikhi1.recipe.search">
 
     <dist:module
         dist:title="@string/title_search">
