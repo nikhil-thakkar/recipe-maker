@@ -1,10 +1,16 @@
 import com.android.build.gradle.BaseExtension
+import com.hiya.plugins.JacocoAndroidUnitTestReportExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.testing.Test
 import org.gradle.kotlin.dsl.apply
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.withType
+import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
+import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.sonarqube.gradle.SonarQubeExtension
 
@@ -67,6 +73,8 @@ internal fun Project.configureAndroidBlock() = extensions.getByType<BaseExtensio
 
     buildTypes {
         getByName("debug") {
+            //had to turn this off because of some issue with Gradle 6.x and causing jacoco agent to fail
+            //this is off by default
             isTestCoverageEnabled = false
         }
     }
@@ -165,13 +173,7 @@ internal fun Project.configureSonarqube() {
             }
         }
     }
-}
 
-internal fun Project.configureJacoco() {
-    if(name == "test_shared") return
-
-    apply("${rootDir}/buildSrc/jacoco.gradle")
-    apply("https://raw.githubusercontent.com/JakeWharton/SdkSearch/master/gradle/projectDependencyGraph.gradle")
     extensions.getByType<SonarQubeExtension>().run {
         properties {
             property(
@@ -180,4 +182,30 @@ internal fun Project.configureJacoco() {
             )
         }
     }
+}
+
+internal fun Project.configureJacoco() {
+    if (name == "test_shared") return
+
+    extensions.getByType<JacocoPluginExtension>().run {
+        toolVersion = "0.8.5"
+    }
+
+    tasks.withType<Test>().run {
+        all {
+            configure<JacocoTaskExtension>() {
+                isIncludeNoLocationClasses = true
+            }
+        }
+    }
+
+    extensions.getByType<JacocoAndroidUnitTestReportExtension>().run {
+        excludes = excludes + listOf(
+            "androidx/databinding/**/*.class",
+            "**/androidx/databinding/*Binding.class",
+            "**/**Bind**/**"
+        )
+    }
+
+    apply("https://raw.githubusercontent.com/JakeWharton/SdkSearch/master/gradle/projectDependencyGraph.gradle")
 }
