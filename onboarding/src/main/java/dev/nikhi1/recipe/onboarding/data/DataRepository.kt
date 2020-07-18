@@ -1,26 +1,31 @@
 package dev.nikhi1.recipe.onboarding.data
 
+import dev.nikhi1.recipe.core.DataSource
+import dev.nikhi1.recipe.core.Repository
 import dev.nikhi1.recipe.core.Result
-import dev.nikhi1.recipe.onboarding.data.model.SubCategoryResponse
+import dev.nikhi1.recipe.onboarding.data.model.Diet
+import dev.nikhi1.recipe.onboarding.data.model.DietResponse
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.http.GET
-import retrofit2.http.Query
 
-interface DataRepository {
-    suspend fun getTopics(continuation: String?): Result<SubCategoryResponse>
+interface DietRepository : Repository {
+    suspend fun getDiets(): Result<List<Diet>>
 }
 
-interface CategoryAPI {
-    @GET("/v3/subcategories")
-    suspend fun getSubCategories(@Query("continuation") continuation: String?): SubCategoryResponse
+interface DietDataSource : DataSource {
+    @GET("/diets.json")
+    suspend fun getAvailableDiets(): DietResponse
 }
 
-class CategoryRepository(private val categoryAPI: CategoryAPI) : DataRepository {
+class DietRepositoryImpl(private val dietDataSource: DietDataSource, private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : DietRepository {
 
-    override suspend fun getTopics(continuation: String?): Result<SubCategoryResponse> {
-        return try {
-            Result.Success(categoryAPI.getSubCategories(continuation))
-        } catch (exception: Exception) {
-            Result.Failure(exception)
+    override suspend fun getDiets(): Result<List<Diet>> = withContext(dispatcher) {
+        try {
+            Result.Success(dietDataSource.getAvailableDiets().diets)
+        } catch (ex: Exception) {
+            Result.Failure(ex)
         }
     }
 }

@@ -1,6 +1,5 @@
 package dev.nikhi1.recipe.onboarding.ui
 
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import dev.nikhi1.recipe.core.BaseViewModel
@@ -9,19 +8,16 @@ import dev.nikhi1.recipe.core.UIState
 import dev.nikhi1.recipe.core.ViewState
 import dev.nikhi1.recipe.core.ViewStateLiveData
 import dev.nikhi1.recipe.core.exhaustive
-import dev.nikhi1.recipe.onboarding.data.DataRepository
-import dev.nikhi1.recipe.onboarding.data.model.SubCategoryResponse
-import dev.nikhi1.recipe.onboarding.data.model.Subcategory
-import dev.nikhi1.recipe.onboarding.ui.model.Category
-import dev.nikhi1.recipe.onboarding.ui.model.CategoryViewType
+import dev.nikhi1.recipe.onboarding.data.DietRepository
+import dev.nikhi1.recipe.onboarding.ui.model.DietViewType
 import kotlinx.coroutines.launch
 
 data class OnboardingViewState(
     val uiState: UIState = UIState.Loading,
-    val categories: List<CategoryViewType> = emptyList()
+    val diets: List<DietViewType> = emptyList()
 ) : ViewState
 
-class OnboardingViewModel(private val categoryPresenter: CategoryPresenter, private val dataRepository: DataRepository) : BaseViewModel<OnboardingViewState>() {
+class OnboardingViewModel(private val dietPresenter: DietPresenter, private val dataRepository: DietRepository) : BaseViewModel<OnboardingViewState>() {
 
     private val _viewState = ViewStateLiveData(
         OnboardingViewState()
@@ -33,13 +29,16 @@ class OnboardingViewModel(private val categoryPresenter: CategoryPresenter, priv
 
         viewModelScope.launch {
 
-            when (val result = dataRepository.getTopics(null)) {
+            when (val result = dataRepository.getDiets()) {
 
                 is Result.Success -> {
-                    val data = result.data ?: SubCategoryResponse.EMPTY
-                    if (data.subcategories.isNotEmpty()) {
+                    val data = result.data ?: emptyList()
+                    if (data.isNotEmpty()) {
                         _viewState.value =
-                            _viewState.value.copy(uiState = UIState.Content, categories = categoryPresenter.map(groupSubcategoryByParentCategory(data.subcategories)))
+                            _viewState.value.copy(
+                                uiState = UIState.Content,
+                                diets = dietPresenter.map(data)
+                            )
                     } else {
                         _viewState.value = _viewState.value.copy(uiState = UIState.Empty)
                     }
@@ -49,19 +48,6 @@ class OnboardingViewModel(private val categoryPresenter: CategoryPresenter, priv
                     _viewState.value = _viewState.value.copy(uiState = UIState.Error(result.error))
                 }
             }.exhaustive
-        }
-    }
-
-    @VisibleForTesting
-    fun groupSubcategoryByParentCategory(list: List<Subcategory>): List<Category> {
-        if (list.isEmpty()) return emptyList()
-
-        //start grouping
-        return list.groupBy { it.parent_category }.map {
-            val subCategories = it.value.map { subcategory ->
-                dev.nikhi1.recipe.onboarding.ui.model.Subcategory(subcategory.id, subcategory.name)
-            }
-            Category(it.key.id, it.key.name, subCategories)
         }
     }
 }

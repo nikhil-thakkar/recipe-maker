@@ -10,35 +10,38 @@ import dev.nikhi1.recipe.core.UIState
 import dev.nikhi1.recipe.core.ViewTypeAdapter
 import dev.nikhi1.recipe.core.exhaustive
 import dev.nikhi1.recipe.onboarding.R
-import dev.nikhi1.recipe.onboarding.data.CategoryAPI
-import dev.nikhi1.recipe.onboarding.data.CategoryRepository
-import dev.nikhi1.recipe.onboarding.data.DataRepository
-import dev.nikhi1.recipe.onboarding.ui.model.CategoryViewType
+import dev.nikhi1.recipe.onboarding.data.DietDataSource
+import dev.nikhi1.recipe.onboarding.data.DietRepository
+import dev.nikhi1.recipe.onboarding.data.DietRepositoryImpl
+import dev.nikhi1.recipe.onboarding.ui.model.DietViewType
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.context.loadKoinModules
+import org.koin.core.context.unloadKoinModules
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
 private var module: Module = module {
     viewModel { OnboardingViewModel(get(), get()) }
-    factory { CategoryRepository(get()) as DataRepository }
-    factory { provideCategoryAPI(get()) }
-    factory { CategoryPresenter() }
+    factory { DietRepositoryImpl(get()) as DietRepository }
+    factory { provideDietAPI(get()) }
+    factory { DietPresenter() }
 }
 
-private fun provideCategoryAPI(retrofit: Retrofit) = retrofit.create(CategoryAPI::class.java)
+private fun provideDietAPI(retrofit: Retrofit) = retrofit.create(DietDataSource::class.java)
 
 class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
 
     val viewModel: OnboardingViewModel by viewModel()
 
-    private val adapter by lazy { ViewTypeAdapter<CategoryViewType>() }
+    private val adapter by lazy { ViewTypeAdapter<DietViewType>() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loadKoinModules(module)
+        if (savedInstanceState == null) {
+            loadKoinModules(module)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,10 +63,17 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
 
                 }
                 UIState.Content -> {
-                    adapter.setList(it.categories)
+                    adapter.setList(it.diets)
                 }
             }.exhaustive
         })
         viewModel.fetchTopics()
+    }
+
+    override fun onDestroy() {
+        if (!requireActivity().isChangingConfigurations) {
+            unloadKoinModules(module)
+        }
+        super.onDestroy()
     }
 }

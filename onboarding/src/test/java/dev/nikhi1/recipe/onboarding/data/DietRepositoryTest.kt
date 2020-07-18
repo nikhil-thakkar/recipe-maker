@@ -14,26 +14,26 @@ import org.junit.Test
 import java.io.IOException
 
 @ExperimentalCoroutinesApi
-class CategoryRepositoryTest {
+class DietRepositoryTest {
 
     @get:Rule
     var coroutinesRule = MainCoroutineRule()
 
-    lateinit var categoryRepository: CategoryRepository
+    lateinit var dietRepository: DietRepository
 
-    lateinit var categoryAPI: CategoryAPI
+    lateinit var dietDataSource: DietDataSource
 
     @Before
     fun setup() {
-        categoryAPI = mockk()
-        categoryRepository = CategoryRepository(categoryAPI)
+        dietDataSource = mockk()
+        dietRepository = DietRepositoryImpl(dietDataSource, coroutinesRule.testDispatcher)
     }
 
     @Test
     fun `fetch topics or interests`() {
         coroutinesRule.runBlocking {
-            coEvery { categoryAPI.getSubCategories(any()) } returns TestData.subCategoryResponse
-            Assert.assertEquals(Result.Success(TestData.subCategoryResponse), categoryRepository.getTopics(null))
+            coEvery { dietDataSource.getAvailableDiets() } returns TestData.dietResponse
+            Assert.assertEquals(Result.Success(TestData.dietResponse.diets), dietRepository.getDiets())
         }
     }
 
@@ -41,8 +41,8 @@ class CategoryRepositoryTest {
     fun `throws IOException while fetching topics or interests`() {
         val ioException = IOException()
         coroutinesRule.runBlocking {
-            coEvery { categoryAPI.getSubCategories(any()) } throws ioException
-            Assert.assertEquals(Result.Failure(ioException), categoryRepository.getTopics(null))
+            coEvery { dietDataSource.getAvailableDiets() } throws ioException
+            Assert.assertEquals(Result.Failure(ioException), dietRepository.getDiets())
         }
     }
 }

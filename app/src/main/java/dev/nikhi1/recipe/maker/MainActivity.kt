@@ -32,12 +32,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash)
         loadKoinModules(module)
 
-        viewModel.navigate.observe(this, Observer {
-            findNavController(R.id.nav_host_fragment).navigate(
-                R.id.action_fragment_to_second_graph, null,
-                NavOptions.Builder().setPopUpTo(R.id.splashFragment, true).build()
-            )
-        })
+        if (savedInstanceState == null) {
+            viewModel.navigate.observe(this, Observer {
+                findNavController(R.id.nav_host_fragment).navigate(
+                    R.id.action_fragment_to_second_graph, null,
+                    NavOptions.Builder().setPopUpTo(R.id.splashFragment, true).build()
+                )
+            })
+        }
     }
 
     override fun onDestroy() {
