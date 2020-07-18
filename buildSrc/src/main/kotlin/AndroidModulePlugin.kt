@@ -73,6 +73,8 @@ internal fun Project.configureAndroidBlock() = extensions.getByType<BaseExtensio
 
     buildTypes {
         getByName("debug") {
+            //had to turn this off because of some issue with Gradle 6.x and causing jacoco agent to fail
+            //this is off by default
             isTestCoverageEnabled = false
         }
     }
@@ -171,11 +173,21 @@ internal fun Project.configureSonarqube() {
             }
         }
     }
+
+    extensions.getByType<SonarQubeExtension>().run {
+        properties {
+            property(
+                "sonar.coverage.jacoco.xmlReportPaths",
+                "${buildDir}/jacoco/jacoco.xml"
+            )
+        }
+    }
 }
 
 internal fun Project.configureJacoco() {
     plugins.apply("com.hiya.jacoco-android")
 
+    //apply("https://raw.githubusercontent.com/JakeWharton/SdkSearch/master/gradle/projectDependencyGraph.gradle")
     extensions.getByType<JacocoPluginExtension>().run {
         toolVersion = "0.8.5"
     }
