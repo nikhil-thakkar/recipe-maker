@@ -162,7 +162,7 @@ internal fun Project.configureSonarqube() {
         rootProject.plugins.apply("org.sonarqube")
         rootProject.extensions.getByType<SonarQubeExtension>().run {
             properties {
-                property("sonar.projectKey", "nikhil-thakkar_eventbrite-clone")
+                property("sonar.projectKey", "nikhil-thakkar_recipe-maker")
                 property("sonar.organization", "nikhil-thakkar")
                 property("sonar.sources", "src/main/java")
                 property("sonar.sources.coveragePlugin", "jacoco")
