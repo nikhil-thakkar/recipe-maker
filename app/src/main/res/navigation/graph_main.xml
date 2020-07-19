@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/splashFragment"
-        android:name="dev.nikhi1.eventbrite.clone.SplashFragment"
+        android:name="dev.nikhi1.recipe.maker.SplashFragment"
         android:label="SplashFragment">
         <action
             android:id="@+id/action_fragment_to_second_graph"

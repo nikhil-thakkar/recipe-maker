@@ -9,7 +9,7 @@
 
         <variable
             name="actionItemListener"
-            type="dev.nikhi1.eventbrite.core.OnItemActionListener" />
+            type="dev.nikhi1.recipe.core.OnItemActionListener" />
 
         <variable
             name="model"

@@ -4,7 +4,7 @@
     <data>
         <variable
             name="model"
-            type="dev.nikhi1.eventbrite.onboarding.ui.model.Category" />
+            type="dev.nikhi1.recipe.onboarding.data.model.Diet" />
     </data>
 
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"

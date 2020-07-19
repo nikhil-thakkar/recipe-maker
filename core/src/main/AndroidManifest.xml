@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="dev.nikhi1.eventbrite.core">
+    package="dev.nikhi1.recipe.core">
 
     <application
         android:allowBackup="true"

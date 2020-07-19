@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/onboardingFragment"
-        android:name="dev.nikhi1.eventbrite.onboarding.ui.OnboardingFragment"
+        android:name="dev.nikhi1.recipe.onboarding.ui.OnboardingFragment"
         android:label="Onboarding" />
 </navigation>

@@ -1,4 +1,4 @@
 <manifest xmlns:dist="http://schemas.android.com/apk/distribution"
     xmlns:tools="http://schemas.android.com/tools"
-    package="dev.nikhi1.eventbrite.onboarding">
+    package="dev.nikhi1.recipe.onboarding">
 </manifest>
