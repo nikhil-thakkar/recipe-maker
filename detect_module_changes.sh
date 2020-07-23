@@ -25,7 +25,7 @@ set -e
 # unshallow since GitHub actions does a shallow clone
 git fetch --unshallow
 git fetch origin
-
+#
 command=$(git diff --name-only origin/master)
 # Get all the modules that were changed
 while read -r line; do
@@ -35,19 +35,21 @@ while read -r line; do
   fi
 done <<< "$command"
 changed_modules=$MODULES
-
 echo "Found changes in $changed_modules"
-# Get a list of all available gradle tasks
-AVAILABLE_TASKS=$(./gradlew tasks --all)
 
-# Check if these modules have gradle tasks
-build_commands=""
-for module in $changed_modules
-do
-  if [[ $AVAILABLE_TASKS =~ $module":" ]]; then
-    build_commands=${build_commands}" :"${module}":jacocoTestDebugUnitTestReport"
-  fi
-done
+if [[ $changed_modules !=  "" ]]; then
+  # Get a list of all available gradle tasks
+  # group available from Gradle 5.1
+  AVAILABLE_TASKS=$(./gradlew tasks --all)
+  # Check if these modules have gradle tasks
+  build_commands=""
+  for module in $changed_modules
+  do
+    if [[ $AVAILABLE_TASKS =~ $module":" ]]; then
+      build_commands=${build_commands}" :"${module}":jacocoTestDebugUnitTestReport"
+    fi
+  done
+fi
 
 if [[ $build_commands == "" ]]; then
     echo "Skip unit tests...."
