@@ -126,9 +126,15 @@ internal fun Project.configureTestSharedDependencies() {
 internal fun Project.configureCoreModuleForOtherModules() {
     if (name == "core") return
     val core = findProject(":core") as Project
+
     extensions.getByName("android").apply {
         when (this) {
             is BaseExtension -> {
+                //TODO: Need to work on this
+                //Idea is to share the [test] folder of [core] with other modules to inject the [DispatchProvider]
+                //val test= sourceSets.getByName("test")
+                //test.java.setSrcDirs(files("${core.projectDir}/src/test/java", test.java.srcDirs))
+
                 dependencies {
                     add("implementation", core)
                 }
@@ -169,7 +175,6 @@ internal fun Project.configureSonarqube() {
                 property("sonar.host.url", "https://sonarcloud.io/")
                 property("sonar.exclusions", "**/*.js,**/test/**, buildSrc/*")
                 property("sonar.login", "")
-
             }
         }
     }

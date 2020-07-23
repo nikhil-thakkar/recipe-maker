@@ -23,7 +23,7 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 
 private var module: Module = module {
-    viewModel { OnboardingViewModel(get(), get()) }
+    viewModel { OnboardingViewModel(get(), get(), get()) }
     factory { DietRepositoryImpl(get()) as DietRepository }
     factory { provideDietAPI(get()) }
     factory { DietPresenter() }
@@ -67,7 +67,7 @@ class OnboardingFragment : Fragment(R.layout.fragment_onboarding) {
                 }
             }.exhaustive
         })
-        viewModel.fetchTopics()
+        viewModel.fetchDiets()
     }
 
     override fun onDestroy() {

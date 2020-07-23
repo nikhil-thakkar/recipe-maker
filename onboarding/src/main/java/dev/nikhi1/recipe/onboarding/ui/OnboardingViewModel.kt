@@ -3,6 +3,7 @@ package dev.nikhi1.recipe.onboarding.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import dev.nikhi1.recipe.core.BaseViewModel
+import dev.nikhi1.recipe.core.Dispatcher
 import dev.nikhi1.recipe.core.Result
 import dev.nikhi1.recipe.core.UIState
 import dev.nikhi1.recipe.core.ViewState
@@ -17,7 +18,8 @@ data class OnboardingViewState(
     val diets: List<DietViewType> = emptyList()
 ) : ViewState
 
-class OnboardingViewModel(private val dietPresenter: DietPresenter, private val dataRepository: DietRepository) : BaseViewModel<OnboardingViewState>() {
+class OnboardingViewModel(private val dietPresenter: DietPresenter, private val dataRepository: DietRepository, private val dispatcher: Dispatcher) :
+    BaseViewModel<OnboardingViewState>() {
 
     private val _viewState = ViewStateLiveData(
         OnboardingViewState()
@@ -25,9 +27,10 @@ class OnboardingViewModel(private val dietPresenter: DietPresenter, private val 
 
     override val viewState: LiveData<OnboardingViewState> = _viewState
 
-    fun fetchTopics() {
+    fun fetchDiets() {
 
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher.main) {
+            if (_viewState.value.diets.isNotEmpty()) return@launch
 
             when (val result = dataRepository.getDiets()) {
 

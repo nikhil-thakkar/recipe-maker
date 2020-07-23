@@ -8,14 +8,13 @@ import dev.nikhi1.recipe.onboarding.data.model.DietResponse
 import dev.nikhi1.recipe.onboarding.ui.DietPresenter
 import dev.nikhi1.recipe.onboarding.ui.OnboardingViewModel
 import dev.nikhi1.recipe.onboarding.ui.OnboardingViewState
-import dev.nikhi1.recipe.test_shared.utils.MainCoroutineRule
 import dev.nikhi1.recipe.test_shared.utils.getOrAwaitValue
-import dev.nikhi1.recipe.test_shared.utils.runBlocking
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -28,63 +27,61 @@ class OnboardingViewModelTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @get:Rule
-    var coroutinesRule = MainCoroutineRule()
-
     lateinit var viewModel: OnboardingViewModel
 
-    val dataRepository: DietRepository = mockk()
-    val dietPresenter: DietPresenter = mockk()
+    private val dataRepository: DietRepository = mockk()
+    private val dietPresenter: DietPresenter = mockk()
+    private val testDispatchProvider = TestDispatchProvider()
 
     @Before
     fun setup() {
         clearMocks(dataRepository, dietPresenter)
-        viewModel = OnboardingViewModel(dietPresenter, dataRepository)
+        viewModel = OnboardingViewModel(dietPresenter, dataRepository, testDispatchProvider)
     }
 
     @Test
     fun `fetch diets`() {
-        coroutinesRule.runBlocking {
+        runBlocking {
             every { dietPresenter.map(any()) } returns TestData.dietViewTypes
             val uiState = OnboardingViewState(
                 uiState = UIState.Content, diets = dietPresenter.map(TestData.dietResponse.diets))
             coEvery {  dataRepository.getDiets() } returns Result.Success(TestData.dietResponse.diets)
-            viewModel.fetchTopics()
+            viewModel.fetchDiets()
             assertEquals(uiState, viewModel.viewState.getOrAwaitValue())
         }
     }
 
     @Test
     fun `empty diets`() {
-        coroutinesRule.runBlocking {
+        runBlocking {
             val uiState =
                 OnboardingViewState(uiState = UIState.Empty)
             coEvery {  dataRepository.getDiets() } returns Result.Success(DietResponse.EMPTY.diets)
-            viewModel.fetchTopics()
+            viewModel.fetchDiets()
             assertEquals(uiState, viewModel.viewState.getOrAwaitValue())
         }
     }
 
     @Test
     fun `no diets`() {
-        coroutinesRule.runBlocking {
+        runBlocking {
             val uiState =
                 OnboardingViewState(uiState = UIState.Empty)
             coEvery {  dataRepository.getDiets() } returns Result.Success(null)
-            viewModel.fetchTopics()
+            viewModel.fetchDiets()
             assertEquals(uiState, viewModel.viewState.getOrAwaitValue())
         }
     }
 
     @Test
     fun `failed fetch diets`() {
-        coroutinesRule.runBlocking {
+        runBlocking {
             val ioException = IOException()
             val uiState = OnboardingViewState(
                 uiState = UIState.Error(ioException)
             )
             coEvery {  dataRepository.getDiets() } returns Result.Failure(ioException)
-            viewModel.fetchTopics()
+            viewModel.fetchDiets()
             assertEquals(uiState, viewModel.viewState.getOrAwaitValue())
         }
     }
