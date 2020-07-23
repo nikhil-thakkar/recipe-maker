@@ -30,9 +30,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
-        loadKoinModules(module)
 
         if (savedInstanceState == null) {
+            loadKoinModules(module)
             viewModel.navigate.observe(this, Observer {
                 findNavController(R.id.nav_host_fragment).navigate(
                     R.id.action_fragment_to_second_graph, null,
@@ -43,7 +43,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        unloadKoinModules(module)
+        if (!isChangingConfigurations) {
+            unloadKoinModules(module)
+        }
         super.onDestroy()
     }
 }

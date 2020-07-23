@@ -22,6 +22,7 @@ object Core {
 
     operator fun invoke(debuggable: Boolean) {
         loadKoinModules(module {
+            single { DispatcherProvider() as Dispatcher }
             single { provideRetrofit(getProperty("BASE_URL"), get()) }
             factory { provideOkHttpClient(get(), get(), get(named("api"))) }
             factory { provideApiKeyInterceptor(getProperty("API_KEY")) }
